@@ -3,6 +3,8 @@ import sys
 import serial
 import time
 
+import pyudev
+
 
 print(sys.version_info)
 port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
@@ -34,6 +36,14 @@ def __get_command(command):
     else:
         print(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
+
+context = pyudev.Context()
+monitor = pyudev.Monitor.from_netlink()
+# For USB devices
+monitor.filter_by(susbsytem='usb')
+for action, device in monitor:
+    vendor_id = device.get('ID_VENDOR_ID')
+    print('{0}: {1}'.format(action, device))
 
 while True:
     try:
