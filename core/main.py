@@ -38,7 +38,7 @@ def __get_command(command):
 
 
 context = pyudev.Context()
-monitor = pyudev.Monitor.from_netlink()
+monitor = pyudev.Monitor.from_netlink(context)
 # For USB devices
 monitor.filter_by(susbsytem='usb')
 for action, device in monitor:
