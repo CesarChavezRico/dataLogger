@@ -3,7 +3,7 @@ import sys
 import serial
 import time
 from subprocess import check_output, CalledProcessError
-
+import pendulum
 import pyudev
 
 
@@ -56,21 +56,22 @@ for action, device in monitor:
                 pass
             else:
                 break
-
         try:
-            check_output(['mount', dev_mame, '/media/usbstorage'])
+            result = check_output(['mount', dev_mame, '/media/usbstorage'])
+            # TODO: Process to copy files
+            check_output(['touch', '/media/usbstorage/{0}'.format(pendulum.now().int_timestamp)])
+            print('New File creation completed ... Unmounting')
+            try:
+                check_output(['unmount', '/media/usbstorage'])
+            except CalledProcessError as e:
+                output = e.output.decode()
+                print('Fatal error creating mounting directory: {0}'.format(output))
+                break
         except CalledProcessError as e:
-            output = e.output.decode()
-            print('Fatal error mounting USB drive: {0}'.format(output))
+            print('Fatal error mounting USB drive: {0}'.format(result))
             break
     elif action == 'remove':
-        print('Removing Device: {0} ...'.format(dev_mame))
-        try:
-            check_output(['unmount', '/media/usbstorage'])
-        except CalledProcessError as e:
-            output = e.output.decode()
-            print('Fatal error creating mounting directory: {0}'.format(output))
-            break
+        print('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
 
 
 while True:
