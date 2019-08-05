@@ -2,6 +2,7 @@
 import sys
 import serial
 import time
+import subprocess
 
 import pyudev
 
@@ -44,6 +45,10 @@ monitor.filter_by('block')
 for action, device in monitor:
     dev_mame = device.get('DEVNAME')
     print('{0}: {1}'.format(action, dev_mame))
+    print('Mounting Device: {0} ...'.format(dev_mame))
+    response = subprocess.check_output('mkdir /media/usbstorage, mount {0} /media/usbstorage'.format(dev_mame)))
+    print('Calling OS with response: {0}'.format(response))
+
 
 while True:
     try:
