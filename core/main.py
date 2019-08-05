@@ -47,12 +47,15 @@ for action, device in monitor:
     print('{0}: {1}'.format(action, dev_mame))
     if action == 'add':
         print('Mounting Device: {0} ...'.format(dev_mame))
+        result = ''
         try:
-            check_output(['mkdir', '/media/usbstorage'])
+            result = check_output(['mkdir', '/media/usbstorage'])
         except CalledProcessError as e:
-            output = e.output.decode()
-            print('Fatal error creating mounting directory: {0}'.format(output))
-            break
+            print('Fatal error creating mounting directory: {0}'.format(result))
+            if 'File Exists' in result:
+                pass
+            else:
+                break
 
         try:
             check_output(['mount', dev_mame, '/media/usbstorage'])
@@ -63,7 +66,7 @@ for action, device in monitor:
     elif action == 'remove':
         print('Removing Device: {0} ...'.format(dev_mame))
         try:
-            check_output(['unmount', dev_mame, '/media/usbstorage'])
+            check_output(['unmount', '/media/usbstorage'])
         except CalledProcessError as e:
             output = e.output.decode()
             print('Fatal error creating mounting directory: {0}'.format(output))
@@ -88,4 +91,4 @@ while True:
         print("ValueError: {0}".format(e))
     except IOError as e:
         print("IOError: {0}".format(e))
-    time.sleep(2)
+    time.sleep(200)
