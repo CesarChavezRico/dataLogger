@@ -47,7 +47,7 @@ for action, device in monitor:
     print('{0}: {1}'.format(action, dev_mame))
     print('Mounting Device: {0} ...'.format(dev_mame))
     try:
-        response = check_output('mkdir /media/usbstorage')
+        response = check_output(['mkdir', '/media/usbstorage'])
         print('Calling OS mkdir with response: {0}'.format(response))
     except CalledProcessError as e:
         output = e.output.decode()
@@ -55,7 +55,7 @@ for action, device in monitor:
         break
 
     try:
-        response = check_output('mount {0} /media/usbstorage'.format(dev_mame))
+        response = check_output(['mount', dev_mame, '/media/usbstorage'])
         print('Calling OS mount with response: {0}'.format(response))
     except CalledProcessError as e:
         output = e.output.decode()
