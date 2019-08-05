@@ -39,11 +39,11 @@ def __get_command(command):
 
 context = pyudev.Context()
 monitor = pyudev.Monitor.from_netlink(context, source=u'kernel')
-# For USB devices
-# monitor.filter_by('usb')
+# For Block devices
+monitor.filter_by('block')
 for action, device in monitor:
-    vendor_id = device.get('ID_VENDOR_ID')
-    print('{0}: {1}'.format(action, device))
+    dev_mame = device.get('DEVNAME')
+    print('{0}: {1}'.format(action, dev_mame))
 
 while True:
     try:
