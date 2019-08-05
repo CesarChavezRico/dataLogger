@@ -52,7 +52,7 @@ for action, device in monitor:
             result = check_output(['mkdir', '/media/usbstorage'])
         except CalledProcessError as e:
             print('Fatal error creating mounting directory: {0}'.format(result))
-            if 'File Exists' in result:
+            if 'File exists' in result:
                 pass
             else:
                 break
@@ -62,7 +62,7 @@ for action, device in monitor:
             check_output(['touch', '/media/usbstorage/{0}'.format(pendulum.now().int_timestamp)])
             print('New File creation completed ... Unmounting')
             try:
-                check_output(['unmount', '/media/usbstorage'])
+                check_output(['umount', '/media/usbstorage'])
             except CalledProcessError as e:
                 output = e.output.decode()
                 print('Fatal error creating mounting directory: {0}'.format(output))
