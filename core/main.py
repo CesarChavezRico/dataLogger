@@ -45,22 +45,29 @@ monitor.filter_by('block')
 for action, device in monitor:
     dev_mame = device.get('DEVNAME')
     print('{0}: {1}'.format(action, dev_mame))
-    print('Mounting Device: {0} ...'.format(dev_mame))
-    try:
-        response = check_output(['mkdir', '/media/usbstorage'])
-        print('Calling OS mkdir with response: {0}'.format(response))
-    except CalledProcessError as e:
-        output = e.output.decode()
-        print('Fatal error creating mounting directory: {0}'.format(output))
-        break
+    if action == 'add':
+        print('Mounting Device: {0} ...'.format(dev_mame))
+        try:
+            check_output(['mkdir', '/media/usbstorage'])
+        except CalledProcessError as e:
+            output = e.output.decode()
+            print('Fatal error creating mounting directory: {0}'.format(output))
+            break
 
-    try:
-        response = check_output(['mount', dev_mame, '/media/usbstorage'])
-        print('Calling OS mount with response: {0}'.format(response))
-    except CalledProcessError as e:
-        output = e.output.decode()
-        print('Fatal error mounting USB drive: {0}'.format(output))
-        break
+        try:
+            check_output(['mount', dev_mame, '/media/usbstorage'])
+        except CalledProcessError as e:
+            output = e.output.decode()
+            print('Fatal error mounting USB drive: {0}'.format(output))
+            break
+    elif action == 'remove':
+        print('Removing Device: {0} ...'.format(dev_mame))
+        try:
+            check_output(['unmount', dev_mame, '/media/usbstorage'])
+        except CalledProcessError as e:
+            output = e.output.decode()
+            print('Fatal error creating mounting directory: {0}'.format(output))
+            break
 
 
 while True:
