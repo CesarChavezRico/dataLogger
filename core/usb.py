@@ -52,7 +52,7 @@ class USB:
                     config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
                     break
             elif action == 'remove':
-                if Path.is_dir(self.mount_path):
+                if Path(self.mount_path).is_dir():
                     config.logging.warning('Orderly Removal of : {0} ... Thanks =)'.format(dev_mame))
                 else:
                     config.logging.warning('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
