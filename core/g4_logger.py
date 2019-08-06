@@ -48,7 +48,7 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
                 try:
-                    self.g4_date_time = pendulum.from_format(h[3:], 'YYYY-MM-DD HH')
+                    self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
                 except ValueError:
                     config.logging.error('Error in G4 device time: {0}'.format(h))
 
