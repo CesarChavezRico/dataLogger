@@ -23,7 +23,7 @@ else:
     Avar1 = Avar1.split(',')
     analog_variable_1 = {
         'command': Avar1[0],
-        'base_index': Avar1[1],
+        'base_index': int(Avar1[1]),
         'name': Avar1[2],
         'm': float(Avar1[3]),
         'b': float(Avar1[4])
@@ -35,10 +35,17 @@ else:
     Avar2 = Avar2.split(',')
     analog_variable_2 = {
         'command': Avar2[0],
-        'base_index': Avar2[1],
+        'base_index': int(Avar2[1]),
         'name': Avar2[2],
         'm': float(Avar2[3]),
         'b': float(Avar2[4])
     }
     logging.debug('Analog Variable 2 - Configuration:\n{0}'.format(analog_variable_2))
+
+    # Create variables package to poll
+    variables = [
+        analog_variable_1,
+        analog_variable_2
+    ]
+
 

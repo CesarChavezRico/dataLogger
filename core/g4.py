@@ -37,7 +37,7 @@ class G4:
 
     def serial_polling(self, rate):
         """
-        Polls G4 device in a predefined rate
+        Polls G4 device in a predefined rate. Uses D(x) fot variables configuration
         :param rate: polling frequency in seconds
         """
         while True:
@@ -46,13 +46,22 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
 
-                mb = self.__get_command('S?1')
+                s_1 = self.__get_command('S?1')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - S?1: [{0}]".format(mb))
+                config.logging.info("Response from G4 - S?1: [{0}]".format(s_1))
 
-                mb = self.__get_command('H')
+                e = self.__get_command('E')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - H: [{0}]".format(mb))
+                config.logging.info("Response from G4 - H: [{0}]".format(e))
+
+                for variable in config.variables:
+                    if variable['command'] == 'MB':
+                        raw_value = int(mb[variable['base_index']:variable['base_index']+4], 16)
+                        value = (raw_value * variable['m']) + variable['b']
+                        config.logging.info('{0} = {1}'.format(variable['name'], value))
+                    elif variable['command'] == 'E':
+                        # TODO: Add implementation for boolean values (will require function 'get_bit_state')
+                        pass
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))

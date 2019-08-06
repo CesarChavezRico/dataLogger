@@ -1,12 +1,9 @@
 import config
-import sys
 import threading
 import time
 
 from g4 import G4
 from usb import USB
-
-config.logging.info(sys.version_info)
 
 if config.console_only == 'True':
     while True:
