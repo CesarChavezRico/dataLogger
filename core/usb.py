@@ -36,7 +36,7 @@ class USB:
                                            '-zavh',
                                            '/data/',
                                            '/media/usbstorage/'])
-                    config.logging.debug('rsync output = {0}'.format(result.decode()))
+                    config.logging.warning('rsync output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
                     try:
                         check_output(['umount', '/media/usbstorage'])
