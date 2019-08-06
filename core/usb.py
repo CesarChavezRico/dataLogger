@@ -18,12 +18,12 @@ class USB:
             dev_mame = device.get('DEVNAME')
             config.logging.info('{0}: {1}'.format(action, dev_mame))
             if action == 'add':
-                config.logging.info('Mounting Device: {0} ...'.format(dev_mame))
+                config.logging.warning('Mounting Device: {0} ...'.format(dev_mame))
                 result = ''
                 try:
                     result = check_output(['mkdir', '/media/usbstorage'])
                 except CalledProcessError as e:
-                    config.logging.info('Fatal error creating mounting directory: {0}'.format(result))
+                    config.logging.error('Fatal error creating mounting directory: {0}'.format(result))
                     if 'File exists' in result:
                         pass
                     else:
@@ -31,18 +31,18 @@ class USB:
                 try:
                     result = check_output(['mount', dev_mame, '/media/usbstorage'])
                     check_output(['rsync', '--append', '--remove-source-files', '/data', '/media/usbstorage'])
-                    config.logging.info('Backup completed! ... Unmounting')
+                    config.logging.warning('Backup completed! ... Unmounting')
                     try:
                         check_output(['umount', '/media/usbstorage'])
                     except CalledProcessError as e:
                         output = e.output.decode()
-                        config.logging.info('Fatal error creating mounting directory: {0}'.format(output))
+                        config.logging.error('Fatal error creating mounting directory: {0}'.format(output))
                         break
                 except CalledProcessError as e:
-                    config.logging.info('Fatal error mounting USB drive: {0}'.format(result))
+                    config.logging.error('Fatal error mounting USB drive: {0}'.format(result))
                     break
             elif action == 'remove':
-                config.logging.info('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
+                config.logging.warning('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
 
 
 

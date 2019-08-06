@@ -78,7 +78,7 @@ class G4:
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
 
-                config.logging.warning('row to write = {0}'.format(row_to_write))
+                config.logging.info('row to write = {0}'.format(row_to_write))
                 # Do we need a new file?
                 file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
