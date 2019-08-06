@@ -5,6 +5,8 @@ services:
   core:
     container_name: core
     build: core
+    volumes:
+      - 'resin-data:/data'
     privileged: true
     labels:
       io.resin.features.dbus: '1'

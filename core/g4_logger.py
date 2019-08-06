@@ -3,6 +3,8 @@ import pendulum
 import serial
 import time
 
+from pathlib import Path
+
 
 class G4:
     port = None
@@ -77,6 +79,22 @@ class G4:
                         pass
 
                 config.logging.warning('row to write = {0}'.format(row_to_write))
+                # Do we need a new file?
+                file_today = Path('/data/log_{0}_{1}_{2}.csv'.format(self.g4_date_time.year,
+                                                                     self.g4_date_time.month,
+                                                                     self.g4_date_time.day))
+                if file_today.is_file():
+                    # The file exists .. append
+                    with open(file_today, 'a') as current_file:
+                        current_file.write(row_to_write)
+                else:
+                    # The file does not exists .. create with header then append
+                    header = 'timestamp,'
+                    for variable in config.variables:
+                        header += '{0},'.format(variable['name'])
+                    with open(file_today, 'w') as current_file:
+                        current_file.write(header)
+                        current_file.write(row_to_write)
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
