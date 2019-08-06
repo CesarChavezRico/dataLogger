@@ -1,4 +1,4 @@
-
+import os
 import logging
 
 console_only = os.environ['console_only']
