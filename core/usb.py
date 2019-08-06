@@ -30,8 +30,12 @@ class USB:
                         break
                 try:
                     result = check_output(['mount', dev_mame, '/media/usbstorage'])
-                    o = check_output(['rsync', '--append', '--remove-source-files', '/data/*.csv', '/media/usbstorage'])
-                    print(o.decode())
+                    result = check_output(['rsync',
+                                           '--append',
+                                           '--remove-source-files',
+                                           '/data/*',
+                                           '/media/usbstorage'])
+                    config.logging.debug('rsync output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
                     try:
                         check_output(['umount', '/media/usbstorage'])
@@ -40,7 +44,7 @@ class USB:
                         config.logging.error('Fatal error creating mounting directory: {0}'.format(output))
                         break
                 except CalledProcessError as e:
-                    config.logging.error('Fatal error mounting USB drive: {0}'.format(result))
+                    config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
                     break
             elif action == 'remove':
                 config.logging.warning('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
