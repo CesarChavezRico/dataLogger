@@ -1,3 +1,4 @@
+import config
 import serial
 import time
 
@@ -21,18 +22,18 @@ class G4:
 
         to_send = "{:02d}{}\x0D".format(address, command)
         self.port.write(to_send.encode())
-        print(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
+        config.logging.info(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
         rx = self.port.readline().decode()
         if rx == '':
-            print('g4_esc_petrolog: __get_command - Timeout!')
+            config.logging.info('g4_esc_petrolog: __get_command - Timeout!')
             return "Timeout"
         elif rx[2] == command[0]:
             to_return = rx[:-2]
-            print(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
+            config.logging.info(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
             return to_return
         else:
-            print(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
+            config.logging.info(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
     def serial_polling(self, rate):
         """
@@ -43,18 +44,18 @@ class G4:
             try:
                 mb = self.__get_command('MB')
                 time.sleep(.1)
-                print("Response from G4 - MB: [{0}]".format(mb))
+                config.logging.info("Response from G4 - MB: [{0}]".format(mb))
 
                 mb = self.__get_command('S?1')
                 time.sleep(.1)
-                print("Response from G4 - S?1: [{0}]".format(mb))
+                config.logging.info("Response from G4 - S?1: [{0}]".format(mb))
 
                 mb = self.__get_command('H')
                 time.sleep(.1)
-                print("Response from G4 - H: [{0}]".format(mb))
+                config.logging.info("Response from G4 - H: [{0}]".format(mb))
 
             except ValueError as e:
-                print("ValueError: {0}".format(e))
+                config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
-                print("IOError: {0}".format(e))
+                config.logging.info("IOError: {0}".format(e))
             time.sleep(rate)

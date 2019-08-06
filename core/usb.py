@@ -1,3 +1,4 @@
+import config
 import pendulum
 import pyudev
 from subprocess import check_output, CalledProcessError
@@ -15,14 +16,14 @@ class USB:
         self.monitor.filter_by('block')
         for action, device in self.monitor:
             dev_mame = device.get('DEVNAME')
-            print('{0}: {1}'.format(action, dev_mame))
+            config.logging.info('{0}: {1}'.format(action, dev_mame))
             if action == 'add':
-                print('Mounting Device: {0} ...'.format(dev_mame))
+                config.logging.info('Mounting Device: {0} ...'.format(dev_mame))
                 result = ''
                 try:
                     result = check_output(['mkdir', '/media/usbstorage'])
                 except CalledProcessError as e:
-                    print('Fatal error creating mounting directory: {0}'.format(result))
+                    config.logging.info('Fatal error creating mounting directory: {0}'.format(result))
                     if 'File exists' in result:
                         pass
                     else:
@@ -31,18 +32,18 @@ class USB:
                     result = check_output(['mount', dev_mame, '/media/usbstorage'])
                     # TODO: Process to copy files
                     check_output(['touch', '/media/usbstorage/{0}'.format(pendulum.now().int_timestamp)])
-                    print('New File creation completed ... Unmounting')
+                    config.logging.info('New File creation completed ... Unmounting')
                     try:
                         check_output(['umount', '/media/usbstorage'])
                     except CalledProcessError as e:
                         output = e.output.decode()
-                        print('Fatal error creating mounting directory: {0}'.format(output))
+                        config.logging.info('Fatal error creating mounting directory: {0}'.format(output))
                         break
                 except CalledProcessError as e:
-                    print('Fatal error mounting USB drive: {0}'.format(result))
+                    config.logging.info('Fatal error mounting USB drive: {0}'.format(result))
                     break
             elif action == 'remove':
-                print('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
+                config.logging.info('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
 
 
 
