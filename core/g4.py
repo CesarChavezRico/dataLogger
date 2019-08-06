@@ -22,18 +22,18 @@ class G4:
 
         to_send = "{:02d}{}\x0D".format(address, command)
         self.port.write(to_send.encode())
-        config.logging.info(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
+        config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
         rx = self.port.readline().decode()
         if rx == '':
-            config.logging.info('g4_esc_petrolog: __get_command - Timeout!')
+            config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
             return "Timeout"
         elif rx[2] == command[0]:
             to_return = rx[:-2]
-            config.logging.info(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
+            config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
             return to_return
         else:
-            config.logging.info(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
+            config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
     def serial_polling(self, rate):
         """
