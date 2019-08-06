@@ -9,6 +9,14 @@ if console_only == 'True':
     pass
 
 else:
+    # Logging configuration
+    logging_level = int(os.environ['logging'])
+    logging.basicConfig(stream=sys.stdout,
+                        format='%(asctime)s - [%(levelname)s]: %(message)s',
+                        level=logging_level)
+    logging.getLogger().setLevel(logging_level)
+    logging.warning("Environment Variable: logging_level = {0}".format(logging_level))
+
     # Analog logging variables configuration
     # 1
     Avar1 = os.environ['Avar1']
@@ -34,10 +42,3 @@ else:
     }
     logging.debug('Analog Variable 2 - Configuration:\n{0}'.format(analog_variable_2))
 
-    # Logging configuration
-    logging_level = int(os.environ['logging'])
-    logging.basicConfig(stream=sys.stdout,
-                        format='%(asctime)s - [%(levelname)s]: %(message)s',
-                        level=logging_level)
-    logging.getLogger().setLevel(logging_level)
-    logging.warning("Environment Variable: logging_level = {0}".format(logging_level))
