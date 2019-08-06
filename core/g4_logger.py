@@ -44,13 +44,6 @@ class G4:
         """
         while True:
             try:
-                h = self.__get_command('H')
-                time.sleep(.1)
-                config.logging.info("Response from G4 - H: [{0}]".format(h))
-                try:
-                    self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
-                except ValueError:
-                    config.logging.error('Error in G4 device time: {0}'.format(h))
 
                 mb = self.__get_command('MB')
                 time.sleep(.1)
@@ -64,14 +57,26 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - E: [{0}]".format(e))
 
+                h = self.__get_command('H')
+                time.sleep(.1)
+                config.logging.info("Response from G4 - H: [{0}]".format(h))
+                try:
+                    self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
+                except ValueError:
+                    config.logging.error('Error in G4 device time: {0}'.format(h))
+
+                row_to_write = '{0},'.format(self.g4_date_time.timestamp())
                 for variable in config.variables:
                     if variable['command'] == 'MB':
                         raw_value = int(mb[variable['base_index']:variable['base_index']+4], 16)
                         value = (raw_value * variable['m']) + variable['b']
+                        row_to_write += '{0},'.format(value)
                         config.logging.info('{0} = {1}'.format(variable['name'], value))
                     elif variable['command'] == 'E':
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
+
+                config.logging.debug('row to write = {0}'.format(row_to_write))
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
