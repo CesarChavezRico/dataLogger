@@ -3,9 +3,11 @@ from pathlib import Path
 import pyudev
 from subprocess import check_output, CalledProcessError
 
+
 class USB:
     monitor = None
-    mount_path = self.mount_path
+    mount_path = '/media/usbstorage'
+
     def __init__(self):
         context = pyudev.Context()
         self.monitor = pyudev.Monitor.from_netlink(context, source=u'kernel')
