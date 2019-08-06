@@ -23,8 +23,8 @@ class USB:
                 try:
                     result = check_output(['mkdir', '/media/usbstorage'])
                 except CalledProcessError as e:
-                    config.logging.error('Fatal error creating mounting directory: {0}'.format(e.output))
-                    if 'File exists' in e.output:
+                    config.logging.error('Fatal error creating mounting directory: {0}'.format(str(e)))
+                    if 'File exists' in str(e):
                         pass
                     else:
                         break
