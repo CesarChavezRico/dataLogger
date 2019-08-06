@@ -23,11 +23,8 @@ class USB:
                 try:
                     result = check_output(['mkdir', '/media/usbstorage'])
                 except CalledProcessError as e:
-                    config.logging.error('Fatal error creating mounting directory: {0}'.format(str(e)))
-                    if 'File exists' in str(e):
-                        pass
-                    else:
-                        break
+                    config.logging.error('Error creating mounting directory: {0}'.format(str(e)))
+                    pass
                 try:
                     result = check_output(['mount', dev_mame, '/media/usbstorage'])
                     result = check_output(['rsync',
@@ -42,7 +39,13 @@ class USB:
                         check_output(['umount', '/media/usbstorage'])
                     except CalledProcessError as e:
                         output = e.output.decode()
-                        config.logging.error('Fatal error creating mounting directory: {0}'.format(output))
+                        config.logging.error('Fatal error unmounting device: {0}'.format(output))
+                        break
+                    try:
+                        check_output(['rm', '-r' '/media/usbstorage'])
+                    except CalledProcessError as e:
+                        output = e.output.decode()
+                        config.logging.error('Fatal error removing mounting directory: {0}'.format(output))
                         break
                 except CalledProcessError as e:
                     config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
