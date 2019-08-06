@@ -2,7 +2,7 @@ import config
 import threading
 import time
 
-from g4 import G4
+from g4_logger import G4
 from usb import USB
 
 if config.console_only == 'True':

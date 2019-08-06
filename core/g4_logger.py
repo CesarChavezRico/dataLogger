@@ -1,10 +1,12 @@
 import config
+import pendulum
 import serial
 import time
 
 
 class G4:
     port = None
+    g4_date_time = None
 
     def __init__(self):
         self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
@@ -42,6 +44,14 @@ class G4:
         """
         while True:
             try:
+                h = self.__get_command('H')
+                time.sleep(.1)
+                config.logging.info("Response from G4 - H: [{0}]".format(h))
+                try:
+                    self.g4_date_time = pendulum.from_format(h[3:], 'YYYY-MM-DD HH')
+                except ValueError:
+                    config.logging.error('Error in G4 device time: {0}'.format(h))
+
                 mb = self.__get_command('MB')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
@@ -52,7 +62,7 @@ class G4:
 
                 e = self.__get_command('E')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - H: [{0}]".format(e))
+                config.logging.info("Response from G4 - E: [{0}]".format(e))
 
                 for variable in config.variables:
                     if variable['command'] == 'MB':
