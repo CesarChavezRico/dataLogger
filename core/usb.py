@@ -42,7 +42,7 @@ class USB:
                         config.logging.error('Fatal error unmounting device: {0}'.format(output))
                         break
                     try:
-                        check_output(['rm', '-r' '/media/usbstorage'])
+                        check_output(['rm', '-r', '/media/usbstorage'])
                     except CalledProcessError as e:
                         output = e.output.decode()
                         config.logging.error('Fatal error removing mounting directory: {0}'.format(output))
