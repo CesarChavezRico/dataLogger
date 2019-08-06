@@ -76,10 +76,10 @@ class G4:
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
 
-                config.logging.debug('row to write = {0}'.format(row_to_write))
+                config.logging.warning('row to write = {0}'.format(row_to_write))
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
-            time.sleep(rate)
+            time.sleep(config.rate)

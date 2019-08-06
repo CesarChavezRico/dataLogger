@@ -17,6 +17,10 @@ else:
     logging.getLogger().setLevel(logging_level)
     logging.warning("Environment Variable: logging_level = {0}".format(logging_level))
 
+    # Polling Rate
+    rate = int(os.environ['polling_rate'])
+    logging.debug('Polling Rate: {0}'.format(rate))
+
     # Analog logging variables configuration
     # 1
     Avar1 = os.environ['Avar1']
