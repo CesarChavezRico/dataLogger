@@ -53,9 +53,9 @@ class USB:
                     break
             elif action == 'remove':
                 if Path(self.mount_path).exists():
-                    config.logging.warning('Orderly Removal of : {0} ... Thanks =)'.format(dev_mame))
-                else:
                     config.logging.warning('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
+                else:
+                    config.logging.warning('Orderly Removal of : {0} ... Thanks =)'.format(dev_mame))
 
 
 
