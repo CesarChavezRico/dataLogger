@@ -30,7 +30,8 @@ class USB:
                         break
                 try:
                     result = check_output(['mount', dev_mame, '/media/usbstorage'])
-                    check_output(['rsync', '--append', '--remove-source-files', '/data', '/media/usbstorage'])
+                    o = check_output(['rsync', '--append', '--remove-source-files', '/data', '/media/usbstorage'])
+                    print(o)
                     config.logging.warning('Backup completed! ... Unmounting')
                     try:
                         check_output(['umount', '/media/usbstorage'])
