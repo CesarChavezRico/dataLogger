@@ -86,7 +86,7 @@ class G4:
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
-                        current_file.write(row_to_write)
+                        current_file.write('{0}\n'.format(row_to_write))
                 else:
                     # The file does not exists .. create with header then append
                     header = 'timestamp,'
@@ -94,7 +94,7 @@ class G4:
                         header += '{0},'.format(variable['name'])
                     with open(file_today, 'w') as current_file:
                         current_file.write(header)
-                        current_file.write(row_to_write)
+                        current_file.write('{0}\n'.format(row_to_write))
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
