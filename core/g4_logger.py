@@ -80,9 +80,7 @@ class G4:
 
                 config.logging.warning('row to write = {0}'.format(row_to_write))
                 # Do we need a new file?
-                file_today = Path('/data/log_{0}_{1}_{2}.csv'.format(self.g4_date_time.year,
-                                                                     self.g4_date_time.month,
-                                                                     self.g4_date_time.day))
+                file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
@@ -93,7 +91,7 @@ class G4:
                     for variable in config.variables:
                         header += '{0},'.format(variable['name'])
                     with open(file_today, 'w') as current_file:
-                        current_file.write(header)
+                        current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
 
             except ValueError as e:
