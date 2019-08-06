@@ -28,7 +28,7 @@ class G4:
             print('g4_esc_petrolog: __get_command - Timeout!')
             return "Timeout"
         elif rx[2] == command[0]:
-            to_return = rx[:-1]
+            to_return = rx[:-2]
             print(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
             return to_return
         else:
