@@ -1,6 +1,6 @@
-import os
 import logging
-
+import os
+import sys
 console_only = os.environ['console_only']
 logging.warning("Environment Variable: console_only = {0}".format(console_only))
 
