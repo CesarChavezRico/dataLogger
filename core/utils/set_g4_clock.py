@@ -32,7 +32,7 @@ def __get_command(command):
         print(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
 
-g4_clock = pendulum.now()
+g4_clock = pendulum.now('America/Chihuahua')
 g4_clock_to_send = g4_clock.format('HH mm ss DD MM YY ')
 __get_command('SH{0}'.format(g4_clock_to_send))
 
