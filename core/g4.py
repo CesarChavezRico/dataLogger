@@ -23,7 +23,7 @@ class G4:
         self.port.write(to_send.encode())
         print(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
-        rx = port.readline().decode()
+        rx = self.port.readline().decode()
         if rx == '':
             print('g4_esc_petrolog: __get_command - Timeout!')
             return "Timeout"
