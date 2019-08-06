@@ -33,8 +33,8 @@ class USB:
                     result = check_output(['rsync',
                                            '--append',
                                            '--remove-source-files',
-                                           '/data/*',
-                                           '/media/usbstorage'])
+                                           '/data/',
+                                           '/media/usbstorage/'])
                     config.logging.debug('rsync output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
                     try:
