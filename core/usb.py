@@ -30,9 +30,8 @@ class USB:
                         break
                 try:
                     result = check_output(['mount', dev_mame, '/media/usbstorage'])
-                    # TODO: Process to copy files
-                    check_output(['touch', '/media/usbstorage/{0}'.format(pendulum.now().int_timestamp)])
-                    config.logging.info('New File creation completed ... Unmounting')
+                    check_output(['rsync', '--append', '--remove-source-files', '/data', '/media/usbstorage'])
+                    config.logging.info('Backup completed! ... Unmounting')
                     try:
                         check_output(['umount', '/media/usbstorage'])
                     except CalledProcessError as e:
