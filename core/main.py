@@ -19,7 +19,7 @@ else:
 
     # launch polling to serial device
     serial_g4_device = G4()
-    polling = threading.Thread(target=serial_g4_device.serial_polling, args=[100])
+    polling = threading.Thread(target=serial_g4_device.serial_polling)
     polling.daemon = True
     polling.start()
 

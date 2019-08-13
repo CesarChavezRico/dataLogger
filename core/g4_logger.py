@@ -39,10 +39,10 @@ class G4:
         else:
             config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
-    def serial_polling(self, rate):
+    def serial_polling(self):
         """
         Polls G4 device in a predefined rate. Uses D(x) fot variables configuration
-        :param rate: polling frequency in seconds
+
         """
         while True:
             try:
