@@ -7,7 +7,7 @@ from usb import USB
 
 if config.console_only == 'True':
     while True:
-        time.sleep(1801)
+        time.sleep(1800)
         config.logging.warning("No app running, console only")
 else:
     config.logging.info(' ----> Main App Running! <---- ')
