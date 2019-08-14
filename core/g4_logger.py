@@ -89,11 +89,11 @@ class G4:
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
-                        blinkt.clear()
                         current_file.write('{0}\n'.format(row_to_write))
-                        # blinkt.set_pixel(0, 255, 0, 0)
+                        blinkt.set_pixel(0, 255, 0, 0)
                         blinkt.show()
                         time.sleep(0.5)
+                        blinkt.clear()
 
 
                 else:
