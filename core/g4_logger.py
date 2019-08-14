@@ -7,7 +7,6 @@ from pathlib import Path
 
 # Importing led bar and configuring led colors (MCR):
 import blinkt
-blinkt.clear()
 blinkt.set_brightness(0.1)
 
 
@@ -94,7 +93,6 @@ class G4:
                         blinkt.show()
                         time.sleep(0.5)
                         blinkt.clear()
-
 
                 else:
                     # The file does not exists .. create with header then append
