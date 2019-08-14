@@ -52,7 +52,7 @@ class G4:
             blinkt.set_pixel(0, 255, 0, 0)
             blinkt.show()
             time.sleep(1)
-            blinkt.clear(0)
+            blinkt.clear()
 
             try:
 
