@@ -89,7 +89,8 @@ class G4:
                 if file_today.is_file():
                     # The file exists .. append
                     blinkt.set_pixel(0, 255, 0, 0)
-                    show()
+                    blinkt.show()
+                    print("Led on")
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
                 else:
@@ -101,6 +102,7 @@ class G4:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
             blinkt.clear()
+            print("Led off")
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
