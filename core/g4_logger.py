@@ -93,6 +93,7 @@ class G4:
                     print("Led on")
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
+                        time.sleep(0.1)
                         blinkt.clear()
                         print("Led off")
                 else:
