@@ -49,11 +49,11 @@ class G4:
 
         """
         while True:
-            for i in range(8):
-                clear()
-                set_pixel(0, 255, 0, 0)
-                show()
-                time.sleep(0.05)
+            clear()
+            set_pixel(0, 255, 0, 0)
+            show()
+            time.sleep(0.05)
+            set_pixel(0, 0, 0, 0)
 
             try:
 
