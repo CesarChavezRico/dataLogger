@@ -11,7 +11,7 @@ set_brightness(0.1)
 set_pixel(0, 255, 0, 0)
 set_pixel(1, 0, 255, 0)
 set_pixel(2, 0, 0, 255)
-clear()
+#clear()
 show()
 
 
