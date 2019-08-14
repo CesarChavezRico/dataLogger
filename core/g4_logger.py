@@ -6,11 +6,9 @@ import time
 from pathlib import Path
 
 # Importing led bar and configuring led colors (MCR):
-from blinkt import set_pixel, set_brightness, show, clear
-clear()
-set_brightness(0.1)
-set_pixel(1, 0, 255, 0)
-set_pixel(2, 0, 0, 255)
+import blinkt
+blinkt.clear()
+blinkt.set_brightness(0.1)
 
 
 class G4:
@@ -90,11 +88,10 @@ class G4:
                 file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
                     # The file exists .. append
-                    set_pixel(0, 255, 0, 0)
+                    blinkt.set_pixel(0, 255, 0, 0)
                     show()
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
-                    clear()
                 else:
                     # The file does not exists .. create with header then append
                     header = 'timestamp,'
@@ -103,7 +100,7 @@ class G4:
                     with open(file_today, 'w') as current_file:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
-
+            blinkt.clear()
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
