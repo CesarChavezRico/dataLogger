@@ -13,7 +13,6 @@ set_pixel(1, 0, 255, 0)
 set_pixel(2, 0, 0, 255)
 
 
-
 class G4:
     port = None
     g4_date_time = None
@@ -95,7 +94,7 @@ class G4:
                     show()
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
-                    clear()
+                        clear()
                 else:
                     # The file does not exists .. create with header then append
                     header = 'timestamp,'
