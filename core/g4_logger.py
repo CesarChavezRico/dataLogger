@@ -90,12 +90,11 @@ class G4:
                     # The file exists .. append
                     blinkt.set_pixel(0, 255, 0, 0)
                     blinkt.show()
-                    print("Led on")
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
-                        time.sleep(0.1)
+                        time.sleep(2)
                         blinkt.clear()
-                        print("Led off")
+
                 else:
                     # The file does not exists .. create with header then append
                     header = 'timestamp,'
