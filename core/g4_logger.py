@@ -49,7 +49,7 @@ class G4:
 
         """
         while True:
-            set_pixel(0, 255, 0, 0)
+            set_pixel(1, 255, 0, 0)
             show()
             time.sleep(0.05)
             clear()
