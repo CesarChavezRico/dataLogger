@@ -4,11 +4,14 @@ import serial
 import time
 
 from pathlib import Path
-from blinkt import set_pixel, set_brightness, show, clear
 
+# Importing led bar and configuring led colors (MCR):
+from blinkt import set_pixel, set_brightness, show, clear
 set_brightness(0.1)
+set_pixel(0, 255, 0, 0)
+set_pixel(1, 0, 255, 0)
+set_pixel(2, 0, 0, 255)
 clear()
-set_pixel(0, 255, 255, 255)
 show()
 
 
