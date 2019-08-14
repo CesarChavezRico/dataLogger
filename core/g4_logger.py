@@ -88,9 +88,9 @@ class G4:
                 file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
                     # The file exists .. append
-                    blinkt.set_pixel(0, 255, 0, 0)
-                    blinkt.show()
                     with open(file_today, 'a') as current_file:
+                        blinkt.set_pixel(0, 255, 0, 0)
+                        blinkt.show()
                         current_file.write('{0}\n'.format(row_to_write))
                         time.sleep(2)
                         blinkt.clear()
