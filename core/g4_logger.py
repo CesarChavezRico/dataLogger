@@ -51,6 +51,10 @@ class G4:
 
         """
         while True:
+            blinkt.clear()
+            blinkt.set_pixel(0, 255, 0, 0)
+            blinkt.show()
+            time.sleep(0.5)
             try:
 
                 mb = self.__get_command('MB')
@@ -91,10 +95,6 @@ class G4:
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
-                        blinkt.clear()
-                        blinkt.set_pixel(0, 255, 0, 0)
-                        blinkt.show()
-                        time.sleep(0.5)
 
                 else:
                     # The file does not exists .. create with header then append
