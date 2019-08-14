@@ -48,7 +48,6 @@ class G4:
 
         """
         while True:
-            blinkt.clear(0)
             blinkt.set_brightness(0.1)
             blinkt.set_pixel(0, 255, 0, 0)
             blinkt.show()
