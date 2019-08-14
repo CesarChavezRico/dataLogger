@@ -93,6 +93,8 @@ class G4:
                     print("Led on")
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
+                        blinkt.clear()
+                        print("Led off")
                 else:
                     # The file does not exists .. create with header then append
                     header = 'timestamp,'
@@ -101,8 +103,7 @@ class G4:
                     with open(file_today, 'w') as current_file:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
-            blinkt.clear()
-            print("Led off")
+
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
