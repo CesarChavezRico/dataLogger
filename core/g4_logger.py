@@ -50,11 +50,6 @@ class G4:
 
         """
         while True:
-            set_pixel(0, 255, 0, 0)
-            show()
-            time.sleep(1.0)
-            set_pixel(0, 0, 0, 0)
-            show()
 
             try:
 
@@ -95,7 +90,12 @@ class G4:
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
+                        set_pixel(0, 255, 0, 0)
+                        show()
+                        time.sleep(0.2)
                         current_file.write('{0}\n'.format(row_to_write))
+                        set_pixel(0, 0, 0, 0)
+                        show()
 
                 else:
                     # The file does not exists .. create with header then append
