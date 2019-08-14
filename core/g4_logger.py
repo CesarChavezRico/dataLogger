@@ -50,6 +50,7 @@ class G4:
         while True:
             blinkt.set_brightness(0.1)
             blinkt.clear()
+            print("CLEAR!")
             blinkt.set_pixel(0, 255, 0, 0)
             blinkt.show()
             time.sleep(0.5)
