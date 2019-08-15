@@ -4,6 +4,7 @@ import serial
 import time
 # Importing led bar and configuring led colors (MCR):
 import blinkt
+blinkt.clear()
 
 
 from pathlib import Path

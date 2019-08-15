@@ -2,9 +2,10 @@ import config
 from pathlib import Path
 import pyudev
 from subprocess import check_output, CalledProcessError
+import time
 # Importing led bar and configuring led colors (MCR):
 import blinkt
-import time
+blinkt.clear()
 
 
 class USB:
