@@ -47,12 +47,8 @@ class USB:
                         check_output(['umount', self.mount_path])
                     except CalledProcessError as e:
                         output = e.output.decode()
-                        blinkt.set_pixel(1, 0, 255, 0)
-                        blinkt.show()
                         time.sleep(4)
                         config.logging.error('Fatal error unmounting device: {0}'.format(output))
-                        blinkt.set_pixel(1, 0, 0, 0)
-                        blinkt.show()
                         break
                     try:
                         check_output(['rm', '-r', self.mount_path])
