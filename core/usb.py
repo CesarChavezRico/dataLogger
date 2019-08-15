@@ -33,7 +33,7 @@ class USB:
                 try:
                     blinkt.set_pixel(2, 0, 255, 0)
                     blinkt.show()
-                    time.sleep(2)
+                    time.sleep(15)
                     result = check_output(['mount', dev_mame, self.mount_path])
                     result = check_output(['rsync',
                                            '--append',
@@ -43,7 +43,7 @@ class USB:
                                            '/media/usbstorage/'])
                     config.logging.warning('rsync output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
-                    time.sleep(2)
+                    time.sleep(15)
                     blinkt.set_pixel(2, 0, 0, 0)
                     blinkt.show()
                     try:
