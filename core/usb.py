@@ -2,6 +2,9 @@ import config
 from pathlib import Path
 import pyudev
 from subprocess import check_output, CalledProcessError
+# Importing led bar and configuring led colors (MCR):
+import blinkt
+import time
 
 
 class USB:
@@ -27,6 +30,8 @@ class USB:
                     config.logging.error('Error creating mounting directory: {0}'.format(str(e)))
                     pass
                 try:
+                    blinkt.set_pixel(1, 0, 255, 0)
+                    blinkt.show()
                     result = check_output(['mount', dev_mame, self.mount_path])
                     result = check_output(['rsync',
                                            '--append',
@@ -36,11 +41,18 @@ class USB:
                                            '/media/usbstorage/'])
                     config.logging.warning('rsync output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
+                    blinkt.set_pixel(1, 0, 0, 0)
+                    blinkt.show()
                     try:
                         check_output(['umount', self.mount_path])
                     except CalledProcessError as e:
                         output = e.output.decode()
+                        blinkt.set_pixel(1, 0, 255, 0)
+                        blinkt.show()
+                        time.sleep(4)
                         config.logging.error('Fatal error unmounting device: {0}'.format(output))
+                        blinkt.set_pixel(1, 0, 0, 0)
+                        blinkt.show()
                         break
                     try:
                         check_output(['rm', '-r', self.mount_path])

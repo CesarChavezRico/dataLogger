@@ -2,13 +2,12 @@ import config
 import pendulum
 import serial
 import time
+# Importing led bar and configuring led colors (MCR):
+import blinkt
+
 
 from pathlib import Path
 
-# Importing led bar and configuring led colors (MCR):
-import blinkt
-from blinkt import set_pixel, set_brightness, show, clear
-clear()
 
 
 class G4:
@@ -90,11 +89,11 @@ class G4:
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
-                        set_pixel(0, 255, 0, 0)
-                        show()
+                        blinkt.set_pixel(0, 255, 0, 0)
+                        blinkt.show()
                         current_file.write('{0}\n'.format(row_to_write))
-                        set_pixel(0, 0, 0, 0)
-                        show()
+                        blinkt.set_pixel(0, 0, 0, 0)
+                        blinkt.show()
 
                 else:
                     # The file does not exists .. create with header then append
