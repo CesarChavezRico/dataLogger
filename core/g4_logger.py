@@ -19,7 +19,6 @@ class G4:
         except:
             config.logging.error('Error Opening Port ttyUSB0')
 
-
     def __get_command(self, command):
         """
         Sends and returns the result of a G4 command
