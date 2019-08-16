@@ -25,6 +25,7 @@ class G4:
         :param command: command to send, without address or CR
         :return: response from ESC. can be timeout.
         """
+
         # Added try/except if usb cable not connected to 222 (MCR)
         address = 1
         self.port.flushInput()
@@ -47,7 +48,7 @@ class G4:
         else:
             config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
-        #  config.logging.error('G4 Cable not Connected')
+        # config.logging.error('G4 Cable not Connected')
 
     def serial_polling(self):
         """
@@ -57,7 +58,6 @@ class G4:
         while True:
 
             try:
-
                 mb = self.__get_command('MB')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
@@ -123,4 +123,6 @@ class G4:
                 config.logging.info("IOError: {0}".format(e))
             except TypeError as e:  # Added TypeError (MCR)
                 config.logging.info("TypeError: {0}".format(e))
+            except AttributeError as e:  # Added AttributeError (MCR)
+                config.logging.info("AttributeError: {0}".format(e))
             time.sleep(config.rate)
