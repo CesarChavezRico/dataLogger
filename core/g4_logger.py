@@ -76,6 +76,7 @@ class G4:
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
+                    row_to_write = '{0},'.format(self.g4_date_time.timestamp())  # Moved row_to_write into the try(MCR)
                     # Removing color if G4 device detected
                     blinkt.set_pixel(3, 0, 0, 0)
                     blinkt.show()
@@ -84,8 +85,7 @@ class G4:
                     blinkt.set_pixel(3, 255, 0, 0, 0.1)
                     blinkt.show()
                     config.logging.error('Error in G4 device time: {0}'.format(h))
-
-                row_to_write = '{0},'.format(self.g4_date_time.timestamp())
+                # row_to_write was HERE
                 for variable in config.variables:
                     if variable['command'] == 'MB':
                         raw_value = int(mb[variable['base_index']:variable['base_index']+4], 16)
