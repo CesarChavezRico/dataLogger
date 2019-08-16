@@ -27,28 +27,34 @@ class G4:
         """
 
         # Added try/except if usb cable not connected to 222 (MCR)
-        address = 1
-        self.port.flushInput()
-        self.port.flushOutput()
-        self.port.flush()
+        try:
+            address = 1
+            self.port.flushInput()
+            self.port.flushOutput()
+            self.port.flush()
 
-        to_send = "{:02d}{}\x0D".format(address, command)
-        self.port.write(to_send.encode())
-        config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
+            to_send = "{:02d}{}\x0D".format(address, command)
+            self.port.write(to_send.encode())
+            config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
-        rx = self.port.readline().decode()
+            rx = self.port.readline().decode()
 
-        if rx == '':
-            config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
-            return "Timeout"
-        elif rx[2] == command[0]:
-            to_return = rx[:-2]
-            config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
-            return to_return
-        else:
-            config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
-
-        # config.logging.error('G4 Cable not Connected')
+            if rx == '':
+                config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
+                return "Timeout"
+            elif rx[2] == command[0]:
+                to_return = rx[:-2]
+                config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
+                return to_return
+            else:
+                config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
+        except:
+            config.logging.error('G4 Cable not Connected')
+            # Try to re open port (MCR)
+            try:
+                self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
+            except:
+                config.logging.error('Error Opening Port ttyUSB0')
 
     def serial_polling(self):
         """
@@ -123,6 +129,4 @@ class G4:
                 config.logging.info("IOError: {0}".format(e))
             except TypeError as e:  # Added TypeError (MCR)
                 config.logging.info("TypeError: {0}".format(e))
-            except:  # Added Other Error (MCR)
-                config.logging.info("Error")
             time.sleep(config.rate)
