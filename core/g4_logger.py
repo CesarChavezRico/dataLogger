@@ -36,18 +36,18 @@ class G4:
             config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
             rx = self.port.readline().decode()
+
+            if rx == '':
+                config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
+                return "Timeout"
+            elif rx[2] == command[0]:
+                to_return = rx[:-2]
+                config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
+                return to_return
+            else:
+                config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
         except:
             config.logging.error('G4 Cable not Connected')
-
-        if rx == '':
-            config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
-            return "Timeout"
-        elif rx[2] == command[0]:
-            to_return = rx[:-2]
-            config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
-            return to_return
-        else:
-            config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
     def serial_polling(self):
         """
