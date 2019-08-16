@@ -52,6 +52,9 @@ class G4:
             config.logging.error('G4 Cable not Connected')
             # Try to re open port (MCR)
             try:
+                self.port.flushInput()
+                self.port.flushOutput()
+                self.port.flush()
                 self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
             except:
                 config.logging.error('Error Opening Port ttyUSB0')
@@ -83,11 +86,11 @@ class G4:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
                     row_to_write = '{0},'.format(self.g4_date_time.timestamp())  # Moved row_to_write into the try(MCR)
                     # Removing color if G4 device detected
-                    blinkt.set_pixel(2, 0, 0, 0)
+                    blinkt.set_pixel(3, 0, 0, 0)
                     blinkt.show()
                 except (ValueError, TypeError):  # Adding TypeError(MCR)
                     # Adding red on pixel 3 for G4 not found
-                    blinkt.set_pixel(2, 255, 0, 0, 0.1)
+                    blinkt.set_pixel(3, 255, 0, 0, 0.1)
                     blinkt.show()
                     config.logging.error('Error in G4 device time: {0}'.format(h))
                 # row_to_write was HERE
