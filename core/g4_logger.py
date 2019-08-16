@@ -122,4 +122,6 @@ class G4:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
+            except TypeError as e:  # Added TypeError (MCR)
+                config.logging.info("TypeError: {0}".format(e))
             time.sleep(config.rate)
