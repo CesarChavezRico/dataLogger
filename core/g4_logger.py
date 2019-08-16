@@ -24,16 +24,21 @@ class G4:
         :param command: command to send, without address or CR
         :return: response from ESC. can be timeout.
         """
-        address = 1
-        self.port.flushInput()
-        self.port.flushOutput()
-        self.port.flush()
+        # Added try/except if usb cable not connected to 222 (MCR)
+        try:
+            address = 1
+            self.port.flushInput()
+            self.port.flushOutput()
+            self.port.flush()
 
-        to_send = "{:02d}{}\x0D".format(address, command)
-        self.port.write(to_send.encode())
-        config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
+            to_send = "{:02d}{}\x0D".format(address, command)
+            self.port.write(to_send.encode())
+            config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
-        rx = self.port.readline().decode()
+            rx = self.port.readline().decode()
+        except:
+            config.logging.error('G4 Cable not Connected')
+
         if rx == '':
             config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
             return "Timeout"
