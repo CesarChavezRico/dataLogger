@@ -70,8 +70,15 @@ class G4:
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
+                    # Removing color if G4 device detected
+                    blinkt.set_pixel(3, 0, 0, 0)
+                    blinkt.show()
                 except ValueError:
+                    # Adding red on pixel 3 for G4 not found
+                    blinkt.set_pixel(3, 255, 0, 0, 0.1)
+                    blinkt.show()
                     config.logging.error('Error in G4 device time: {0}'.format(h))
+
 
                 row_to_write = '{0},'.format(self.g4_date_time.timestamp())
                 for variable in config.variables:
@@ -90,7 +97,8 @@ class G4:
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
-                        blinkt.set_pixel(0, 255, 0, 0)
+                        # Adding green color to led 0 when transferring data
+                        blinkt.set_pixel(0, 0, 255, 0, 0.1)
                         blinkt.show()
                         current_file.write('{0}\n'.format(row_to_write))
                         blinkt.set_pixel(0, 0, 0, 0)
