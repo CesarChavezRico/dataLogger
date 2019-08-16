@@ -14,7 +14,11 @@ class G4:
     g4_date_time = None
 
     def __init__(self):
-        self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
+        try:
+            self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
+        except:
+            config.logging.error('Error Opening Port ttyUSB0')
+
 
     def __get_command(self, command):
         """
