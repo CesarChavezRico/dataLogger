@@ -46,11 +46,11 @@ class USB:
                                            '/media/usbstorage/'])
                     config.logging.warning('rsync output = {0}'.format(result.decode()))
                     # Adding 4 seconds on back up completed
-                    blinkt.set(2, 0, 0, 255)
+                    blinkt.set_pixel(2, 0, 0, 255)
                     blinkt.show()
                     time.sleep(4)
                     config.logging.warning('Backup completed! ... Unmounting')
-                    blinkt.set(2, 0, 0, 0)
+                    blinkt.set_pixel(2, 0, 0, 0)
                     blinkt.show()
                     try:
                         check_output(['umount', self.mount_path])
