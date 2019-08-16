@@ -6,9 +6,7 @@ import time
 import blinkt
 blinkt.clear()
 
-
 from pathlib import Path
-
 
 
 class G4:
@@ -83,7 +81,6 @@ class G4:
                     blinkt.set_pixel(3, 255, 0, 0, 0.1)
                     blinkt.show()
                     config.logging.error('Error in G4 device time: {0}'.format(h))
-
 
                 row_to_write = '{0},'.format(self.g4_date_time.timestamp())
                 for variable in config.variables:
