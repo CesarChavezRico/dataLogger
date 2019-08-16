@@ -79,7 +79,7 @@ class G4:
                     # Removing color if G4 device detected
                     blinkt.set_pixel(3, 0, 0, 0)
                     blinkt.show()
-                except ValueError or TypeError:  # Adding TypeError(MCR)
+                except (ValueError, TypeError):  # Adding TypeError(MCR)
                     # Adding red on pixel 3 for G4 not found
                     blinkt.set_pixel(3, 255, 0, 0, 0.1)
                     blinkt.show()
