@@ -14,10 +14,7 @@ class G4:
     g4_date_time = None
 
     def __init__(self):
-        try:
-            self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
-        except:
-            config.logging.error('Error Opening Port ttyUSB0')
+        self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
 
     def __get_command(self, command):
         """
@@ -27,37 +24,27 @@ class G4:
         """
 
         # Added try/except if usb cable not connected to 222 (MCR)
-        try:
-            address = 1
-            self.port.flushInput()
-            self.port.flushOutput()
-            self.port.flush()
 
-            to_send = "{:02d}{}\x0D".format(address, command)
-            self.port.write(to_send.encode())
-            config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
+        address = 1
+        self.port.flushInput()
+        self.port.flushOutput()
+        self.port.flush()
 
-            rx = self.port.readline().decode()
+        to_send = "{:02d}{}\x0D".format(address, command)
+        self.port.write(to_send.encode())
+        config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
 
-            if rx == '':
-                config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
-                return "Timeout"
-            elif rx[2] == command[0]:
-                to_return = rx[:-2]
-                config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
-                return to_return
-            else:
-                config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
-        except:
-            config.logging.error('G4 Cable not Connected')
-            # Try to re open port (MCR)
-            try:
-                self.port.flushInput()
-                self.port.flushOutput()
-                self.port.flush()
-                self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
-            except:
-                config.logging.error('Error Opening Port ttyUSB0')
+        rx = self.port.readline().decode()
+
+        if rx == '':
+            config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
+            return "Timeout"
+        elif rx[2] == command[0]:
+            to_return = rx[:-2]
+            config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
+            return to_return
+        else:
+            config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
 
     def serial_polling(self):
         """
@@ -93,7 +80,7 @@ class G4:
                     blinkt.set_pixel(3, 255, 0, 0, 0.1)
                     blinkt.show()
                     config.logging.error('Error in G4 device time: {0}'.format(h))
-                # row_to_write was HERE
+                config.logging.info('row to write = {0}'.format(row_to_write))
                 for variable in config.variables:
                     if variable['command'] == 'MB':
                         raw_value = int(mb[variable['base_index']:variable['base_index']+4], 16)
@@ -104,7 +91,7 @@ class G4:
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
 
-                config.logging.info('row to write = {0}'.format(row_to_write))
+
                 # Do we need a new file?
                 file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
