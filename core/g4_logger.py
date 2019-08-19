@@ -51,13 +51,13 @@ class G4:
         except:
             config.logging.error('G4 Cable not Connected')
             # Try to re open port (MCR)
-            try:
-                self.port.flushInput()
-                self.port.flushOutput()
-                self.port.flush()
-                self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
-            except:
-                config.logging.error('Error Opening Port ttyUSB0')
+            #try:
+            self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
+            self.port.flushInput()
+            self.port.flushOutput()
+            self.port.flush()
+            #except:
+                #config.logging.error('Error Opening Port ttyUSB0')
 
     def serial_polling(self):
         """
