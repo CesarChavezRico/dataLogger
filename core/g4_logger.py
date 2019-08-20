@@ -52,6 +52,7 @@ class G4:
             # Try to re open port (MCR)
             try:
                 self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
+                print(self.port)
             except:
                 config.logging.error('Error Opening Serial Port')
                 time.sleep(10)
