@@ -40,7 +40,7 @@ class G4:
             rx = self.port.readline().decode()
 
             # Removing color if G4 device detected
-            blinkt.set_pixel(0, 0, 0, 0)
+            blinkt.set_pixel(1, 0, 0, 0)
             blinkt.show()
 
             if rx == '':
@@ -53,8 +53,8 @@ class G4:
             else:
                 config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
         except:
-            # Adding red on pixel 0 for G4 not found
-            blinkt.set_pixel(0, 255, 0, 0, 0.1)
+            # Adding red on pixel 1 for G4 not found
+            blinkt.set_pixel(1, 255, 0, 0, 0.1)
             blinkt.show()
 
             # Try to re open port (MCR)
@@ -75,21 +75,37 @@ class G4:
         while True:
 
             try:
+                blinkt.set_pixel(1, 255, 255, 0, 0.1)
+                blinkt.show()
                 mb = self.__get_command('MB')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
+                blinkt.set_pixel(1, 0, 0, 0)
+                blinkt.show()
 
+                blinkt.set_pixel(1, 255, 255, 0, 0.1)
+                blinkt.show()
                 s_1 = self.__get_command('S?1')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - S?1: [{0}]".format(s_1))
+                blinkt.set_pixel(1, 0, 0, 0)
+                blinkt.show()
 
+                blinkt.set_pixel(1, 255, 255, 0, 0.1)
+                blinkt.show()
                 e = self.__get_command('E')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - E: [{0}]".format(e))
+                blinkt.set_pixel(1, 0, 0, 0)
+                blinkt.show()
 
+                blinkt.set_pixel(1, 255, 255, 0, 0.1)
+                blinkt.show()
                 h = self.__get_command('H')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
+                blinkt.set_pixel(1, 0, 0, 0)
+                blinkt.show()
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
                     row_to_write = '{0},'.format(self.g4_date_time.timestamp())  # Moved row_to_write into the try(MCR)
