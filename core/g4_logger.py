@@ -39,6 +39,10 @@ class G4:
 
             rx = self.port.readline().decode()
 
+            # Removing color if G4 device detected
+            blinkt.set_pixel(0, 0, 0, 0)
+            blinkt.show()
+
             if rx == '':
                 config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
                 return "Timeout"
@@ -49,6 +53,10 @@ class G4:
             else:
                 config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
         except:
+            # Adding red on pixel 0 for G4 not found
+            blinkt.set_pixel(0, 255, 0, 0, 0.1)
+            blinkt.show()
+
             # Try to re open port (MCR)
             try:
                 self.port.close()
@@ -85,13 +93,8 @@ class G4:
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
                     row_to_write = '{0},'.format(self.g4_date_time.timestamp())  # Moved row_to_write into the try(MCR)
-                    # Removing color if G4 device detected
-                    blinkt.set_pixel(0, 0, 0, 0)
-                    blinkt.show()
+
                 except (ValueError, TypeError):  # Adding TypeError(MCR)
-                    # Adding red on pixel 0 for G4 not found
-                    blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                    blinkt.show()
                     config.logging.error('Error in G4 device time: {0}'.format(h))
                 # row_to_write was HERE
                 for variable in config.variables:
