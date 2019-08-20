@@ -17,7 +17,7 @@ class G4:
         try:
             self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
         except:
-            config.logging.error('Error Opening Port ttyUSB0')
+            config.logging.error('Error Opening Serial Port (Init)')
 
     def __get_command(self, command):
         """
@@ -49,15 +49,12 @@ class G4:
             else:
                 config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
         except:
-            config.logging.error('G4 Cable not Connected')
             # Try to re open port (MCR)
-            #try:
-            self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
-            self.port.flushInput()
-            self.port.flushOutput()
-            self.port.flush()
-            #except:
-                #config.logging.error('Error Opening Port ttyUSB0')
+            try:
+                self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
+            except:
+                config.logging.error('Error Opening Serial Port')
+                time.sleep(10)
 
     def serial_polling(self):
         """
