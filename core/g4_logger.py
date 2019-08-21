@@ -99,7 +99,6 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - E: [{0}]".format(e))
 
-
                 blinkt.set_pixel(1, 255, 255, 0, 0.1)
                 blinkt.show()
                 h = self.__get_command('H')
