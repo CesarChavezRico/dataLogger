@@ -55,16 +55,16 @@ class G4:
         except:
             # Adding red on pixel color for each command if error
             if command == "MB":
-                blinkt.set_pixel(1, 255, 0, 0, 0.1)
+                blinkt.set_pixel(1, 255, 255, 255, 0.1)
                 blinkt.show()
             elif command == "S?1":
-                blinkt.set_pixel(2, 255, 0, 0, 0.1)
+                blinkt.set_pixel(2, 255, 255, 255, 0.1)
                 blinkt.show()
             elif command == "E":
-                blinkt.set_pixel(3, 255, 0, 0, 0.1)
+                blinkt.set_pixel(3, 255, 255, 255, 0.1)
                 blinkt.show()
             elif command == "H":
-                blinkt.set_pixel(4, 255, 0, 0, 0.1)
+                blinkt.set_pixel(4, 255, 255, 255, 0.1)
                 blinkt.show()
             else:
                 pass
