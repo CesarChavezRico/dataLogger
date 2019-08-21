@@ -55,16 +55,16 @@ class G4:
         except:
             # Adding red on pixel color for each command if error
             if command == "MB":
-                blinkt.set_pixel(1, 255, 255, 255, 0.1)
+                blinkt.set_pixel(1, 255, 0, 0, 0.1)
                 blinkt.show()
             elif command == "S?1":
-                blinkt.set_pixel(2, 255, 255, 255, 0.1)
+                blinkt.set_pixel(2, 255, 0, 0, 0.1)
                 blinkt.show()
             elif command == "E":
-                blinkt.set_pixel(3, 255, 255, 255, 0.1)
+                blinkt.set_pixel(3, 255, 0, 0, 0.1)
                 blinkt.show()
             elif command == "H":
-                blinkt.set_pixel(4, 255, 255, 255, 0.1)
+                blinkt.set_pixel(4, 255, 0, 0, 0.1)
                 blinkt.show()
             else:
                 pass
@@ -87,7 +87,7 @@ class G4:
         while True:
 
             try:
-                blinkt.set_pixel(1, 255, 255, 0, 0.1)
+                blinkt.set_pixel(1, 255, 255, 255, 0.1)
                 blinkt.show()
                 mb = self.__get_command('MB')
                 blinkt.set_pixel(1, 0, 0, 0)
@@ -95,7 +95,7 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
 
-                blinkt.set_pixel(2, 255, 255, 0, 0.1)
+                blinkt.set_pixel(2, 255, 255, 255, 0.1)
                 blinkt.show()
                 s_1 = self.__get_command('S?1')
                 blinkt.set_pixel(2, 0, 0, 0)
@@ -103,7 +103,7 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - S?1: [{0}]".format(s_1))
 
-                blinkt.set_pixel(3, 255, 255, 0, 0.1)
+                blinkt.set_pixel(3, 255, 255, 255, 0.1)
                 blinkt.show()
                 e = self.__get_command('E')
                 blinkt.set_pixel(3, 0, 0, 0)
@@ -111,7 +111,7 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - E: [{0}]".format(e))
 
-                blinkt.set_pixel(4, 255, 255, 0, 0.1)
+                blinkt.set_pixel(4, 255, 255, 255, 0.1)
                 blinkt.show()
                 h = self.__get_command('H')
                 blinkt.set_pixel(4, 0, 0, 0)
