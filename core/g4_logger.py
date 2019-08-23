@@ -53,6 +53,7 @@ class G4:
                 config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
         except:
             # Adding red on pixel color for each command if error
+            print("errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
             if command == "MB":
                 blinkt.set_pixel(1, 255, 0, 0, 0.1)
                 blinkt.show()
