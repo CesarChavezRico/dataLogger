@@ -121,12 +121,18 @@ class G4:
                     with open(file_today, 'w') as current_file:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
-            blinkt.set_pixel(0, 0, 255, 255, 0.1)
-            blinkt.show()
+                blinkt.set_pixel(0, 0, 255, 255, 0.1)
+                blinkt.show()
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
+                blinkt.set_pixel(0, 0, 255, 0, 0.1)
+                blinkt.show()
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
+                blinkt.set_pixel(0, 0, 255, 0, 0.1)
+                blinkt.show()
             except TypeError as e:  # Added TypeError (MCR)
                 config.logging.info("TypeError: {0}".format(e))
+                blinkt.set_pixel(0, 0, 255, 0, 0.1)
+                blinkt.show()
             time.sleep(config.rate)
