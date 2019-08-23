@@ -4,8 +4,8 @@ import pyudev
 from subprocess import check_output, CalledProcessError
 import time
 # Importing led bar and configuring led colors (MCR):
-import blinkt
-blinkt.clear()
+# import # blinkt
+
 
 
 class USB:
@@ -29,16 +29,16 @@ class USB:
                     result = check_output(['mkdir', self.mount_path])
                 except CalledProcessError as e:
                     # Adding 4 seconds last 3 led´s yellow for error on mounting directory
-                    blinkt.set_pixel(5, 255, 255, 0, 0.1)
-                    blinkt.set_pixel(6, 255, 255, 0, 0.1)
-                    blinkt.set_pixel(7, 255, 255, 0, 0.1)
-                    blinkt.show()
-                    time.sleep(4)
+                    # blinkt.set_pixel(5, 255, 255, 0, 0.1)
+                    # blinkt.set_pixel(6, 255, 255, 0, 0.1)
+                    # blinkt.set_pixel(7, 255, 255, 0, 0.1)
+                    # blinkt.show()
+                    # time.sleep(4)
                     config.logging.error('Error creating mounting directory: {0}'.format(str(e)))
-                    blinkt.set_pixel(5, 0, 0, 0)
-                    blinkt.set_pixel(6, 0, 0, 0)
-                    blinkt.set_pixel(7, 0, 0, 0)
-                    blinkt.show()
+                    # blinkt.set_pixel(5, 0, 0, 0)
+                    # blinkt.set_pixel(6, 0, 0, 0)
+                    # blinkt.set_pixel(7, 0, 0, 0)
+                    # blinkt.show()
                     pass
                 try:
                     result = check_output(['mount', dev_mame, self.mount_path])
@@ -50,60 +50,60 @@ class USB:
                                            '/media/usbstorage/'])
                     config.logging.warning('rsync output = {0}'.format(result.decode()))
                     # Adding 4 seconds on back up completed
-                    blinkt.set_pixel(5, 0, 0, 255, 0.1)
-                    blinkt.set_pixel(6, 0, 0, 255, 0.1)
-                    blinkt.set_pixel(7, 0, 0, 255, 0.1)
-                    blinkt.show()
+                    # blinkt.set_pixel(5, 0, 0, 255, 0.1)
+                    # blinkt.set_pixel(6, 0, 0, 255, 0.1)
+                    # blinkt.set_pixel(7, 0, 0, 255, 0.1)
+                    # blinkt.show()
                     time.sleep(4)
                     config.logging.warning('Backup completed! ... Unmounting')
-                    blinkt.set_pixel(5, 0, 0, 0)
-                    blinkt.set_pixel(6, 0, 0, 0)
-                    blinkt.set_pixel(7, 0, 0, 0)
-                    blinkt.show()
+                    # blinkt.set_pixel(5, 0, 0, 0)
+                    # blinkt.set_pixel(6, 0, 0, 0)
+                    # blinkt.set_pixel(7, 0, 0, 0)
+                    # blinkt.show()
                     try:
                         check_output(['umount', self.mount_path])
                     except CalledProcessError as e:
                         output = e.output.decode()
                         # Adding 4 seconds last 3 led´s red for Fatal error
-                        blinkt.set_pixel(5, 0, 255, 0, 0.1)
-                        blinkt.set_pixel(6, 0, 255, 0, 0.1)
-                        blinkt.set_pixel(7, 0, 255, 0, 0.1)
-                        blinkt.show()
+                        # blinkt.set_pixel(5, 0, 255, 0, 0.1)
+                        # blinkt.set_pixel(6, 0, 255, 0, 0.1)
+                        # blinkt.set_pixel(7, 0, 255, 0, 0.1)
+                        # blinkt.show()
                         time.sleep(4)
                         config.logging.error('Fatal error unmounting device: {0}'.format(output))
-                        blinkt.set_pixel(5, 0, 0, 0)
-                        blinkt.set_pixel(6, 0, 0, 0)
-                        blinkt.set_pixel(7, 0, 0, 0)
-                        blinkt.show()
+                        # blinkt.set_pixel(5, 0, 0, 0)
+                        # blinkt.set_pixel(6, 0, 0, 0)
+                        # blinkt.set_pixel(7, 0, 0, 0)
+                        # blinkt.show()
                         break
                     try:
                         check_output(['rm', '-r', self.mount_path])
                     except CalledProcessError as e:
                         # Adding 4 seconds last 3 led´s red for Fatal error
-                        blinkt.set_pixel(5, 0, 255, 0, 0.1)
-                        blinkt.set_pixel(6, 0, 255, 0, 0.1)
-                        blinkt.set_pixel(7, 0, 255, 0, 0.1)
-                        blinkt.show()
+                        # blinkt.set_pixel(5, 0, 255, 0, 0.1)
+                        # blinkt.set_pixel(6, 0, 255, 0, 0.1)
+                        # blinkt.set_pixel(7, 0, 255, 0, 0.1)
+                        # blinkt.show()
                         time.sleep(4)
                         output = e.output.decode()
                         config.logging.error('Fatal error removing mounting directory: {0}'.format(output))
-                        blinkt.set_pixel(5, 0, 0, 0)
-                        blinkt.set_pixel(6, 0, 0, 0)
-                        blinkt.set_pixel(7, 0, 0, 0)
-                        blinkt.show()
+                        # blinkt.set_pixel(5, 0, 0, 0)
+                        # blinkt.set_pixel(6, 0, 0, 0)
+                        # blinkt.set_pixel(7, 0, 0, 0)
+                        # blinkt.show()
                         break
                 except CalledProcessError as e:
                     # Adding 4 seconds all led red for Fatal error
-                    blinkt.set_pixel(5, 0, 255, 0, 0.1)
-                    blinkt.set_pixel(6, 0, 255, 0, 0.1)
-                    blinkt.set_pixel(7, 0, 255, 0, 0.1)
-                    blinkt.show()
+                    # blinkt.set_pixel(5, 0, 255, 0, 0.1)
+                    # blinkt.set_pixel(6, 0, 255, 0, 0.1)
+                    # blinkt.set_pixel(7, 0, 255, 0, 0.1)
+                    # blinkt.show()
                     time.sleep(4)
                     config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
-                    blinkt.set_pixel(5, 0, 0, 0)
-                    blinkt.set_pixel(6, 0, 0, 0)
-                    blinkt.set_pixel(7, 0, 0, 0)
-                    blinkt.show()
+                    # blinkt.set_pixel(5, 0, 0, 0)
+                    # blinkt.set_pixel(6, 0, 0, 0)
+                    # blinkt.set_pixel(7, 0, 0, 0)
+                    # blinkt.show()
                     break
             elif action == 'remove':
                 if Path(self.mount_path).exists():
