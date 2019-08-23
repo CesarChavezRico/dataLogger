@@ -3,8 +3,8 @@ import pendulum
 import serial
 import time
 # Importing led bar and configuring led colors (MCR):
-import blinkt
-blinkt.clear()
+# import blinkt
+# blinkt.clear()
 
 from pathlib import Path
 
@@ -40,8 +40,8 @@ class G4:
             rx = self.port.readline().decode()
 
             # Removing color if G4 device detected
-            blinkt.set_pixel(1, 0, 0, 0)
-            blinkt.show()
+            # blinkt.set_pixel(1, 0, 0, 0)
+            # blinkt.show()
 
             if rx == '':
                 config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
@@ -55,17 +55,17 @@ class G4:
         except:
             # Adding red on pixel color for each command if error
             if command == "MB":
-                blinkt.set_pixel(1, 255, 0, 0, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(1, 255, 0, 0, 0.1)
+                # blinkt.show()
             elif command == "S?1":
-                blinkt.set_pixel(2, 255, 0, 0, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(2, 255, 0, 0, 0.1)
+                # blinkt.show()
             elif command == "E":
-                blinkt.set_pixel(3, 255, 0, 0, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(3, 255, 0, 0, 0.1)
+                # blinkt.show()
             elif command == "H":
-                blinkt.set_pixel(4, 255, 0, 0, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(4, 255, 0, 0, 0.1)
+                # blinkt.show()
             else:
                 pass
 
@@ -87,45 +87,46 @@ class G4:
         while True:
 
             try:
-                blinkt.set_pixel(1, 255, 255, 255, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(1, 255, 255, 255, 0.1)
+                # blinkt.show()
                 mb = self.__get_command('MB')
-                blinkt.set_pixel(1, 0, 0, 0)
-                blinkt.show()
+                # blinkt.set_pixel(1, 0, 0, 0)
+                # blinkt.show()
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
 
-                blinkt.set_pixel(2, 255, 255, 255, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(2, 255, 255, 255, 0.1)
+                # blinkt.show()
                 s_1 = self.__get_command('S?1')
-                blinkt.set_pixel(2, 0, 0, 0)
-                blinkt.show()
+                # blinkt.set_pixel(2, 0, 0, 0)
+                # blinkt.show()
                 time.sleep(.1)
                 config.logging.info("Response from G4 - S?1: [{0}]".format(s_1))
 
-                blinkt.set_pixel(3, 255, 255, 255, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(3, 255, 255, 255, 0.1)
+                # blinkt.show()
                 e = self.__get_command('E')
-                blinkt.set_pixel(3, 0, 0, 0)
-                blinkt.show()
+                # blinkt.set_pixel(3, 0, 0, 0)
+                # blinkt.show()
                 time.sleep(.1)
                 config.logging.info("Response from G4 - E: [{0}]".format(e))
 
-                blinkt.set_pixel(4, 255, 255, 255, 0.1)
-                blinkt.show()
+                # blinkt.set_pixel(4, 255, 255, 255, 0.1)
+                # blinkt.show()
                 h = self.__get_command('H')
-                blinkt.set_pixel(4, 0, 0, 0)
-                blinkt.show()
+                # blinkt.set_pixel(4, 0, 0, 0)
+                # blinkt.show()
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
 
+                row_to_write = None
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
                     row_to_write = '{0},'.format(self.g4_date_time.timestamp())  # Moved row_to_write into the try(MCR)
 
                 except (ValueError, TypeError):  # Adding TypeError(MCR)
                     config.logging.error('Error in G4 device time: {0}'.format(h))
-                # row_to_write was HERE
+
                 for variable in config.variables:
                     if variable['command'] == 'MB':
                         raw_value = int(mb[variable['base_index']:variable['base_index']+4], 16)
@@ -143,11 +144,11 @@ class G4:
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
                         # Adding green color to led 0 when transferring data
-                        blinkt.set_pixel(0, 0, 255, 0, 0.1)
-                        blinkt.show()
+                        # blinkt.set_pixel(0, 0, 255, 0, 0.1)
+                        # blinkt.show()
                         current_file.write('{0}\n'.format(row_to_write))
-                        blinkt.set_pixel(0, 0, 0, 0)
-                        blinkt.show()
+                        # blinkt.set_pixel(0, 0, 0, 0)
+                        # blinkt.show()
 
                 else:
                     # The file does not exists .. create with header then append
