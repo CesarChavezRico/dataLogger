@@ -3,7 +3,7 @@ import pendulum
 import serial
 import time
 # Importing led bar and configuring led colors (MCR):
-import blinkt
+from blinkt import set_pixel, set_brightness, show, clear
 
 from pathlib import Path
 
@@ -56,9 +56,9 @@ class G4:
                 config.logging.warning("Serial Reconnected!")
             except:
                 config.logging.error('Error Opening Serial Port')
-                blinkt.clear()
-                blinkt.set_pixel(1, 255, 0, 0, 0.1)
-                blinkt.show()
+                clear()
+                set_pixel(1, 255, 0, 0, 0.1)
+                show()
                 time.sleep(10)
 
     def serial_polling(self):
@@ -85,9 +85,9 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
 
-                blinkt.clear()
-                blinkt.set_pixel(1, 0, 255, 0, 0.1)
-                blinkt.show()
+                clear()
+                set_pixel(1, 0, 255, 0, 0.1)
+                show()
                 time.sleep(0.1)
                 row_to_write = None
                 try:
@@ -124,29 +124,29 @@ class G4:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
 
-                blinkt.clear()
-                blinkt.set_pixel(0, 0, 255, 0, 0.1)
-                blinkt.show()
+                clear()
+                set_pixel(0, 0, 255, 0, 0.1)
+                show()
                 time.sleep(0.1)
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
-                blinkt.clear()
-                blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
+                clear()
+                set_pixel(0, 255, 0, 0, 0.1)
+                show()
                 time.sleep(0.1)
 
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
-                blinkt.clear()
-                blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
+                clear()
+                set_pixel(0, 255, 0, 0, 0.1)
+                show()
                 time.sleep(0.1)
 
             except TypeError as e:  # Added TypeError (MCR)
                 config.logging.info("TypeError: {0}".format(e))
-                blinkt.clear()
-                blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
+                clear()
+                set_pixel(0, 255, 0, 0, 0.1)
+                show()
                 time.sleep(0.1)
             time.sleep(config.rate)
