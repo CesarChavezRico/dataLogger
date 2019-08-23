@@ -56,8 +56,8 @@ class G4:
                 config.logging.warning("Serial Reconnected!")
             except:
                 config.logging.error('Error Opening Serial Port')
-                # blinkt.set_pixel(1, 255, 0, 0, 0.1)
-                blinkt.show()
+                blinkt.set_pixel(1, 255, 0, 0, 0.1)
+                # blinkt.show()
                 time.sleep(5)
 
     def serial_polling(self):
@@ -84,8 +84,8 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
 
-                # blinkt.set_pixel(1, 0, 255, 0, 0.1)
-                blinkt.show()
+                blinkt.set_pixel(1, 0, 255, 0, 0.1)
+                # blinkt.show()
                 row_to_write = None
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
@@ -121,21 +121,21 @@ class G4:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
 
-                # blinkt.set_pixel(0, 0, 255, 0, 0.1)
-                blinkt.show()
+                blinkt.set_pixel(0, 0, 255, 0, 0.1)
+                # blinkt.show()
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
-                # blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
+                blinkt.set_pixel(0, 255, 0, 0, 0.1)
+                # blinkt.show()
 
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
-                # blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
+                blinkt.set_pixel(0, 255, 0, 0, 0.1)
+                # blinkt.show()
 
             except TypeError as e:  # Added TypeError (MCR)
                 config.logging.info("TypeError: {0}".format(e))
-                # blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
+                blinkt.set_pixel(0, 255, 0, 0, 0.1)
+                # blinkt.show()
             time.sleep(config.rate)
