@@ -39,8 +39,8 @@ class G4:
             rx = self.port.readline().decode()
 
             # Removing color if G4 device detected
-            blinkt.set_pixel(1, 0, 0, 0)
-            blinkt.show()
+            # blinkt.set_pixel(1, 0, 0, 0)
+            # blinkt.show()
 
             if rx == '':
                 config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
