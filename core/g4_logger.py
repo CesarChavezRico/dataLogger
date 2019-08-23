@@ -86,6 +86,7 @@ class G4:
 
                 blinkt.set_pixel(1, 0, 255, 0, 0.1)
                 blinkt.show()
+                time.sleep(0.1)
                 row_to_write = None
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
@@ -122,19 +123,23 @@ class G4:
                         current_file.write('{0}\n'.format(row_to_write))
                 blinkt.set_pixel(0, 0, 255, 0, 0.1)
                 blinkt.show()
+                time.sleep(0.1)
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
                 blinkt.set_pixel(0, 255, 0, 0, 0.1)
                 blinkt.show()
+                time.sleep(0.1)
 
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
                 blinkt.set_pixel(0, 255, 0, 0, 0.1)
                 blinkt.show()
+                time.sleep(0.1)
 
             except TypeError as e:  # Added TypeError (MCR)
                 config.logging.info("TypeError: {0}".format(e))
                 blinkt.set_pixel(0, 255, 0, 0, 0.1)
                 blinkt.show()
+                time.sleep(0.1)
             time.sleep(config.rate)
