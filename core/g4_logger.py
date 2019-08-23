@@ -84,7 +84,7 @@ class G4:
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
 
-                blinkt.set_pixel(1, 0, 255, 255, 0.1)
+                blinkt.set_pixel(1, 0, 0, 255, 0.1)
                 blinkt.show()
                 row_to_write = None
                 try:
