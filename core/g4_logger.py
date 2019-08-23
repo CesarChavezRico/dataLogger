@@ -53,21 +53,21 @@ class G4:
                 config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
         except:
             # Adding red on pixel color for each command if error
-            #if command == "MB":
+            if command == "MB":
                 blinkt.set_pixel(1, 255, 0, 0, 0.1)
                 blinkt.show()
-            #elif command == "S?1":
+            elif command == "S?1":
                 blinkt.set_pixel(2, 255, 0, 0, 0.1)
                 blinkt.show()
-            #elif command == "E":
+            elif command == "E":
                 blinkt.set_pixel(3, 255, 0, 0, 0.1)
                 blinkt.show()
-            #elif command == "H":
+            elif command == "H":
                 blinkt.set_pixel(4, 255, 0, 0, 0.1)
                 blinkt.show()
-            #else:
-            #   pass
-            pass
+            else:
+                pass
+
             # Try to re open port (MCR)
             try:
                 self.port.close()
