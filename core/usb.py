@@ -17,29 +17,26 @@ class USB:
         self.monitor = pyudev.Monitor.from_netlink(context, source=u'kernel')
 
     def check_for_devices(self):
+        devices_count = 0
         # Filter for 'Block' devices
         self.monitor.filter_by('block')
         for action, device in self.monitor:
             dev_mame = device.get('DEVNAME')
             config.logging.info('{0}: {1}'.format(action, dev_mame))
             if action == 'add':
-                config.logging.warning('Mounting Device: {0} ...'.format(dev_mame))
+                devices_count += 1
+                config.logging.warning('Trying to mount device #{0}: {1} ...'.format(devices_count, dev_mame))
                 result = ''
                 try:
                     result = check_output(['mkdir', self.mount_path])
                 except CalledProcessError as e:
                     # Adding 4 seconds last 3 led´s yellow for error on mounting directory
-                    # blinkt.set_pixel(5, 255, 255, 0, 0.1)
-                    # blinkt.set_pixel(6, 255, 255, 0, 0.1)
-                    # blinkt.set_pixel(7, 255, 255, 0, 0.1)
-                    # blinkt.show()
+                    # TODO: add led signaling
                     # time.sleep(4)
-                    config.logging.error('Error creating mounting directory: {0}'.format(str(e)))
-                    # blinkt.set_pixel(5, 0, 0, 0)
-                    # blinkt.set_pixel(6, 0, 0, 0)
-                    # blinkt.set_pixel(7, 0, 0, 0)
-                    # blinkt.show()
-                    pass
+                    config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(devices_count,
+                                                                                                         str(e)))
+                    # Lets try with next device if available
+                    continue
                 try:
                     result = check_output(['mount', dev_mame, self.mount_path])
                     result = check_output(['rsync',
@@ -50,61 +47,41 @@ class USB:
                                            '/media/usbstorage/'])
                     config.logging.warning('rsync output = {0}'.format(result.decode()))
                     # Adding 4 seconds on back up completed
-                    # blinkt.set_pixel(5, 0, 0, 255, 0.1)
-                    # blinkt.set_pixel(6, 0, 0, 255, 0.1)
-                    # blinkt.set_pixel(7, 0, 0, 255, 0.1)
-                    # blinkt.show()
-                    time.sleep(4)
+                    # TODO: add led signaling
+                    # time.sleep(4)
                     config.logging.warning('Backup completed! ... Unmounting')
-                    # blinkt.set_pixel(5, 0, 0, 0)
-                    # blinkt.set_pixel(6, 0, 0, 0)
-                    # blinkt.set_pixel(7, 0, 0, 0)
-                    # blinkt.show()
+                    # TODO: add led signaling
                     try:
                         check_output(['umount', self.mount_path])
                     except CalledProcessError as e:
                         output = e.output.decode()
                         # Adding 4 seconds last 3 led´s red for Fatal error
-                        # blinkt.set_pixel(5, 0, 255, 0, 0.1)
-                        # blinkt.set_pixel(6, 0, 255, 0, 0.1)
-                        # blinkt.set_pixel(7, 0, 255, 0, 0.1)
-                        # blinkt.show()
+                        # TODO: add led signaling
                         time.sleep(4)
-                        config.logging.error('Fatal error unmounting device: {0}'.format(output))
-                        # blinkt.set_pixel(5, 0, 0, 0)
-                        # blinkt.set_pixel(6, 0, 0, 0)
-                        # blinkt.set_pixel(7, 0, 0, 0)
-                        # blinkt.show()
-                        break
+                        config.logging.error('Fatal error unmounting device #{0}: {1}'.format(devices_count,output))
+                        # TODO: add led signaling
+                        # Lets try with next device if available
+                        continue
                     try:
                         check_output(['rm', '-r', self.mount_path])
                     except CalledProcessError as e:
                         # Adding 4 seconds last 3 led´s red for Fatal error
-                        # blinkt.set_pixel(5, 0, 255, 0, 0.1)
-                        # blinkt.set_pixel(6, 0, 255, 0, 0.1)
-                        # blinkt.set_pixel(7, 0, 255, 0, 0.1)
-                        # blinkt.show()
-                        time.sleep(4)
+                        # TODO: add led signaling
+                        # time.sleep(4)
                         output = e.output.decode()
-                        config.logging.error('Fatal error removing mounting directory: {0}'.format(output))
-                        # blinkt.set_pixel(5, 0, 0, 0)
-                        # blinkt.set_pixel(6, 0, 0, 0)
-                        # blinkt.set_pixel(7, 0, 0, 0)
-                        # blinkt.show()
-                        break
+                        config.logging.error('Fatal error removing mounting directory for device #{0}: {1}'
+                                             .format(devices_count, output))
+                        # TODO: add led signaling
+                        # Lets try with next device if available
+                        continue
                 except CalledProcessError as e:
                     # Adding 4 seconds all led red for Fatal error
-                    # blinkt.set_pixel(5, 0, 255, 0, 0.1)
-                    # blinkt.set_pixel(6, 0, 255, 0, 0.1)
-                    # blinkt.set_pixel(7, 0, 255, 0, 0.1)
-                    # blinkt.show()
-                    time.sleep(4)
+                    # TODO: add led signaling
+                    # time.sleep(4)
                     config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
-                    # blinkt.set_pixel(5, 0, 0, 0)
-                    # blinkt.set_pixel(6, 0, 0, 0)
-                    # blinkt.set_pixel(7, 0, 0, 0)
-                    # blinkt.show()
-                    break
+                    # TODO: add led signaling
+                    # Lets try with next device if available
+                    continue
             elif action == 'remove':
                 if Path(self.mount_path).exists():
                     config.logging.warning('Unexpected Device Removal! : {0} ... Bad =('.format(dev_mame))
