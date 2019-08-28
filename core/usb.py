@@ -35,8 +35,8 @@ class USB:
                     # time.sleep(4)
                     config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(devices_count,
                                                                                                          str(e)))
-                    # Lets try with next device if available
-                    continue
+                    # Maybe the directory is already created, all good
+                    pass
                 try:
                     result = check_output(['mount', dev_mame, self.mount_path])
                     result = check_output(['rsync',
