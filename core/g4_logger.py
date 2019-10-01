@@ -2,8 +2,7 @@ import config
 import pendulum
 import serial
 import time
-# Importing led bar and configuring led colors (MCR):
-import blinkt
+from gpiozero import LED
 
 from pathlib import Path
 
@@ -12,11 +11,18 @@ class G4:
     port = None
     g4_date_time = None
 
+    blue_led = None
+    red_led = None
+
     def __init__(self):
         try:
             self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
-        except:
-            config.logging.error('Error Opening Serial Port (Init)')
+        except Exception as e:
+            config.logging.error(f'Error Opening Serial Port (Init): {e.__str__()}')
+
+        # Init LEDs
+        self.blue_led = LED(22)
+        self.red_led = LED(23)
 
     def __get_command(self, command):
         """
@@ -34,30 +40,28 @@ class G4:
 
             to_send = "{:02d}{}\x0D".format(address, command)
             self.port.write(to_send.encode())
-            config.logging.debug(('g4_esc_petrolog: __get_command - Tx: {0}'.format(to_send)))
+            config.logging.debug(('g4_logger: __get_command - Tx: {0}'.format(to_send)))
 
             rx = self.port.readline().decode()
 
             if rx == '':
-                config.logging.debug('g4_esc_petrolog: __get_command - Timeout!')
+                config.logging.debug('g4_logger: __get_command - Timeout!')
                 return "Timeout"
             elif rx[2] == command[0]:
                 to_return = rx[:-2]
-                config.logging.debug(('g4_esc_petrolog: __get_command - Success Rx: {0}'.format(to_return)))
+                config.logging.debug(('g4_logger: __get_command - Success Rx: {0}'.format(to_return)))
                 return to_return
             else:
-                config.logging.warning(('g4_esc_petrolog: __get_command - Ugly trash! = {0}'.format(rx)))
-        except:
+                config.logging.warning(('g4_logger: __get_command - Ugly trash! = {0}'.format(rx)))
+        except Exception as e:
             # Try to re open port (MCR)
             try:
                 self.port.close()
                 time.sleep(1)
                 self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
                 config.logging.warning("Serial Reconnected!")
-            except:
-                config.logging.error('Error Opening Serial Port')
-                blinkt.set_pixel(1, 255, 0, 0, 0.1)
-                blinkt.show()
+            except Exception as e:
+                config.logging.error(f'Error Opening Serial Port: {e.__str__()}')
                 time.sleep(5)
 
     def serial_polling(self):
@@ -66,6 +70,9 @@ class G4:
 
         """
         while True:
+            # testing leds
+            self.blue_led.on()
+            self.red_led.on()
 
             try:
                 mb = self.__get_command('MB')
@@ -83,8 +90,6 @@ class G4:
                 h = self.__get_command('H')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - H: [{0}]".format(h))
-
-                blinkt.set_pixel(1, 0, 255, 0, 0.1)
 
                 row_to_write = None
                 try:
@@ -121,21 +126,15 @@ class G4:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
 
-                blinkt.set_pixel(0, 0, 255, 0, 0.1)
-
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
-                blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
-
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
-                blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
-
-            except TypeError as e:  # Added TypeError (MCR)
+            except TypeError as e:
                 config.logging.info("TypeError: {0}".format(e))
-                blinkt.set_pixel(0, 255, 0, 0, 0.1)
-                blinkt.show()
-            blinkt.show()
+
+            # testing leds
+            self.blue_led.off()
+            self.red_led.off()
+
             time.sleep(config.rate)
