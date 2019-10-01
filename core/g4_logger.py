@@ -54,9 +54,12 @@ class G4:
             else:
                 config.logging.warning(('g4_logger: __get_command - Ugly trash! = {0}'.format(rx)))
         except Exception as e:
-            # Try to re open port (MCR)
             try:
-                self.port.close()
+                try:
+                    self.port.close()
+                except TypeError as e:
+                    config.logging.warning("NoneType: Port never initialized correctly")
+                    pass
                 time.sleep(1)
                 self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
                 config.logging.warning("Serial Reconnected!")
