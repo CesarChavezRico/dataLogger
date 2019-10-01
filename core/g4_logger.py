@@ -73,11 +73,10 @@ class G4:
 
         """
         while True:
-            # testing leds
-            self.blue_led.on()
-            self.red_led.on()
-
             try:
+                # Data gathering LED (blue)
+                self.blue_led.on()
+
                 mb = self.__get_command('MB')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
@@ -97,9 +96,8 @@ class G4:
                 row_to_write = None
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
-                    row_to_write = '{0},'.format(self.g4_date_time.timestamp())  # Moved row_to_write into the try(MCR)
-
-                except (ValueError, TypeError):  # Adding TypeError(MCR)
+                    row_to_write = '{0},'.format(self.g4_date_time.timestamp())
+                except (ValueError, TypeError):
                     config.logging.error('Error in G4 device time: {0}'.format(h))
 
                 for variable in config.variables:
@@ -111,7 +109,11 @@ class G4:
                     elif variable['command'] == 'E':
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
+                # Data gathering LED (blue)
+                self.blue_led.off()
 
+                # Write to NV memory LED (red)
+                self.red_led.on()
                 config.logging.info('row to write = {0}'.format(row_to_write))
                 # Do we need a new file?
                 file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
@@ -119,7 +121,6 @@ class G4:
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
                         current_file.write('{0}\n'.format(row_to_write))
-
                 else:
                     # The file does not exists .. create with header then append
                     header = 'timestamp,'
@@ -128,16 +129,13 @@ class G4:
                     with open(file_today, 'w') as current_file:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
-
+                # Write to NV memory LED (red)
+                self.red_led.off()
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
                 config.logging.info("IOError: {0}".format(e))
             except TypeError as e:
                 config.logging.info("TypeError: {0}".format(e))
-
-            # testing leds
-            self.blue_led.off()
-            self.red_led.off()
 
             time.sleep(config.rate)
