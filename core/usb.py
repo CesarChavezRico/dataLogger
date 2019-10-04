@@ -73,12 +73,12 @@ class USB:
 
                     result = check_output(['rsync',
                                            '--append',
+                                           '--remove-source-files',
                                            '-zavh',
                                            '/media/permanent_usb_storage/running/',
                                            '/media/usb_storage/data_logger'])
                     config.logging.warning('rsync [external backup] output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
-                    check_output(['rm', '*', '/media/permanent_usb_storage/running/'])
 
                     try:
                         check_output(['umount', self.mount_path])
@@ -96,7 +96,7 @@ class USB:
                     self.red_led.off()
 
                 except CalledProcessError as e:
-                    config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
+                    config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(e.__str__()))
                     continue
 
             elif action == 'remove':
