@@ -73,12 +73,6 @@ class USB:
 
                     result = check_output(['rsync',
                                            '--append',
-                                           '-zavh',
-                                           '/media/permanent_usb_storage/running/',
-                                           '/media/permanent_usb_storage/backup'])
-                    config.logging.warning('rsync [local backup] output = {0}'.format(result.decode()))
-                    result = check_output(['rsync',
-                                           '--append',
                                            '--remove-source-files',
                                            '-zavh',
                                            '/media/permanent_usb_storage/running/',
