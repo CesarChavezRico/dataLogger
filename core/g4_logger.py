@@ -12,8 +12,12 @@ class G4:
     g4_date_time = None
 
     blue_led = None
+    local_running_file_lock = None
 
-    def __init__(self):
+    def __init__(self, file_lock):
+
+        self.local_running_file_lock = file_lock
+
         try:
             self.port = serial.Serial("/dev/ttyUSB0", baudrate=19200, timeout=1)
         except Exception as e:
@@ -121,19 +125,20 @@ class G4:
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
 
-                # Write to Permanent USB memory LED (blue)
-                self.blue_led.on()
+                with self.local_running_file_lock:
+                    # Write to Permanent USB memory LED (blue)
+                    self.blue_led.on()
 
-                config.logging.info('row to write = {0}'.format(row_to_write))
+                    config.logging.info('row to write = {0}'.format(row_to_write))
 
-                # -------> Running File
-                self._write_to_file('/media/permanent_usb_storage/running', row_to_write)
+                    # -------> Running File
+                    self._write_to_file('/media/permanent_usb_storage/running', row_to_write)
 
-                # -------> Backup File
-                self._write_to_file('/media/permanent_usb_storage/backup', row_to_write)
+                    # -------> Backup File
+                    self._write_to_file('/media/permanent_usb_storage/backup', row_to_write)
 
-                # Write to Permanent USB memory LED (blue)
-                self.blue_led.off()
+                    # Write to Permanent USB memory LED (blue)
+                    self.blue_led.off()
 
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))

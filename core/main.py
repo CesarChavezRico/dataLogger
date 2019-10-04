@@ -11,16 +11,20 @@ if config.console_only == 'True':
         config.logging.warning("No app running, console only")
 else:
     config.logging.info(' ----> Main App Running! <---- ')
+    # Create Lock for running file in permanent USB memory
+    running_file_lock = threading.Lock()
 
     # launch USB Drive scanning and file backup process
     usb_storage = USB()
-    scan_and_backup = threading.Thread(target=usb_storage.check_for_devices)
+    scan_and_backup = threading.Thread(target=usb_storage.check_for_devices,
+                                       args=[running_file_lock])
     scan_and_backup.daemon = True
     scan_and_backup.start()
 
     # launch polling to serial device
     serial_g4_device = G4()
-    polling = threading.Thread(target=serial_g4_device.serial_polling)
+    polling = threading.Thread(target=serial_g4_device.serial_polling,
+                               args=[running_file_lock])
     polling.daemon = True
     polling.start()
 
