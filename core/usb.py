@@ -67,20 +67,21 @@ class USB:
                         check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
                     except CalledProcessError as e:
                         config.logging.error(
+
                             f'Error creating [data_logger] directory in external drive, already exists?: {str(e)}')
                         pass
 
                     result = check_output(['rsync',
                                            '--append',
                                            '-zavh',
-                                           '/media/permanent_usb_storage/running',
+                                           '/media/permanent_usb_storage/running/',
                                            '/media/permanent_usb_storage/backup'])
                     config.logging.warning('rsync [local backup] output = {0}'.format(result.decode()))
                     result = check_output(['rsync',
                                            '--append',
                                            '--remove-source-files',
                                            '-zavh',
-                                           '/media/permanent_usb_storage/running',
+                                           '/media/permanent_usb_storage/running/',
                                            '/media/usb_storage/data_logger'])
                     config.logging.warning('rsync [external backup] output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
