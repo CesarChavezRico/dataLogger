@@ -1,6 +1,5 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-python:latest
 
-
 # Using UDEV to dynamically detect USB Drives during runtime
 ENV UDEV=1
 
