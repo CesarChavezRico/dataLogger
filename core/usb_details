@@ -66,3 +66,6 @@ Device Qualifier (for other device speed):
 can't get debug descriptor: Resource temporarily unavailable
 Device Status:     0x0000
   (Bus Powered)
+
+
+rsync --append --remove-source-files -zavh . ./test

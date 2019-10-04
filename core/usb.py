@@ -75,7 +75,7 @@ class USB:
                         result = check_output(['rsync',
                                                '--append',
                                                '--remove-source-files',
-                                               '-zavh',
+                                               '-zavhc',
                                                '/media/permanent_usb_storage/running/',
                                                '/media/usb_storage/data_logger'])
                         config.logging.warning('rsync [external backup] output = {0}'.format(result.decode()))
