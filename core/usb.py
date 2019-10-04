@@ -8,7 +8,7 @@ import time
 class USB:
     monitor = None
     mount_path = '/media/usb_storage'
-    permanent_mount_path = '/media/permanent_usb_ storage'
+    permanent_mount_path = '/media/permanent_usb_storage'
     permanent_dev_name = '/dev/permanent_usb_drive'
 
     def __init__(self):
@@ -17,7 +17,8 @@ class USB:
         call(["udevadm", "trigger"])  # Make sure that UDEV rules executed
         self._mount_usb(self.permanent_mount_path, self.permanent_dev_name)  # Mount our permanent USB drive
 
-    def _mount_usb(self, mount_path, dev_name):
+    @staticmethod
+    def _mount_usb(mount_path, dev_name):
         try:
             result = check_output(['mkdir', mount_path])
         except CalledProcessError as e:

@@ -116,7 +116,8 @@ class G4:
                 self.red_led.on()
                 config.logging.info('row to write = {0}'.format(row_to_write))
                 # Do we need a new file?
-                file_today = Path('/data/log_{0}.csv'.format(self.g4_date_time.format('YYYY-MM-DD')))
+                file_today = Path('/media/permanent_usb_storage/log_{0}.csv'.
+                                  format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
                     # The file exists .. append
                     with open(file_today, 'a') as current_file:
