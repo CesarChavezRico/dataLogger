@@ -24,7 +24,7 @@ class USB:
             # Adding 4 seconds last 3 led´s yellow for error on mounting directory
             # TODO: add led signaling
             # time.sleep(4)
-            config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(devices_count,
+            config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(dev_name,
                                                                                                  str(e)))
             # Maybe the directory is already created, all good
             pass
