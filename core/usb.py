@@ -3,6 +3,7 @@ from pathlib import Path
 import pyudev
 from subprocess import call, check_output, CalledProcessError
 import time
+from gpiozero import LED
 
 
 class USB:
@@ -11,11 +12,17 @@ class USB:
     permanent_mount_path = '/media/permanent_usb_storage'
     permanent_dev_name = '/dev/permanent_usb_drive'
 
+    red_led = None
+
     def __init__(self):
+
         context = pyudev.Context()
         self.monitor = pyudev.Monitor.from_netlink(context, source=u'kernel')
         call(["udevadm", "trigger"])  # Make sure that UDEV rules executed
         self._mount_usb(self.permanent_mount_path, self.permanent_dev_name)  # Mount our permanent USB drive
+
+        # Init LEDs
+        self.red_led = LED(23)
 
     @staticmethod
     def _mount_usb(mount_path, dev_name):
@@ -40,6 +47,7 @@ class USB:
             dev_name = device.get('DEVNAME')
             config.logging.info('{0}: {1}'.format(action, dev_name))
             if action == 'add':
+                self.red_led.on()
                 devices_count += 1
                 config.logging.warning('Trying to mount device #{0}: {1} ...'.format(devices_count, dev_name))
                 result = ''
@@ -47,47 +55,38 @@ class USB:
                     self._mount_usb(self.mount_path, dev_name)
                     result = check_output(['rsync',
                                            '--append',
+                                           '-zavh',
+                                           '/media/permanent_usb_storage/running',
+                                           '/media/usb_storage/data_logger'])
+                    config.logging.warning('rsync [local backup] output = {0}'.format(result.decode()))
+                    result = check_output(['rsync',
+                                           '--append',
                                            '--remove-source-files',
                                            '-zavh',
-                                           '/media/permanent_usb_storage',
-                                           '/media/usb_storage/'])
-                    config.logging.warning('rsync output = {0}'.format(result.decode()))
-                    # Adding 4 seconds on back up completed
-                    # TODO: add led signaling
-                    # time.sleep(4)
+                                           '/media/permanent_usb_storage/running',
+                                           '/media/usb_storage/data_logger'])
+                    config.logging.warning('rsync [external backup] output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
                     # TODO: add led signaling
                     try:
                         check_output(['umount', self.mount_path])
                     except CalledProcessError as e:
                         output = e.output.decode()
-                        # Adding 4 seconds last 3 led´s red for Fatal error
-                        # TODO: add led signaling
-                        time.sleep(4)
                         config.logging.error('Fatal error unmounting device #{0}: {1}'.format(devices_count,output))
-                        # TODO: add led signaling
-                        # Lets try with next device if available
                         continue
                     try:
                         check_output(['rm', '-r', self.mount_path])
                     except CalledProcessError as e:
-                        # Adding 4 seconds last 3 led´s red for Fatal error
-                        # TODO: add led signaling
-                        # time.sleep(4)
                         output = e.output.decode()
                         config.logging.error('Fatal error removing mounting directory for device #{0}: {1}'
                                              .format(devices_count, output))
-                        # TODO: add led signaling
-                        # Lets try with next device if available
                         continue
+                    self.red_led.off()
+
                 except CalledProcessError as e:
-                    # Adding 4 seconds all led red for Fatal error
-                    # TODO: add led signaling
-                    # time.sleep(4)
                     config.logging.error('Fatal error mounting or copying to USB drive: {0}'.format(result))
-                    # TODO: add led signaling
-                    # Lets try with next device if available
                     continue
+
             elif action == 'remove':
                 if Path(self.mount_path).exists():
                     config.logging.warning('Unexpected Device Removal! : {0} ... Bad =('.format(dev_name))

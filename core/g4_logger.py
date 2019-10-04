@@ -12,7 +12,6 @@ class G4:
     g4_date_time = None
 
     blue_led = None
-    red_led = None
 
     def __init__(self):
         try:
@@ -22,7 +21,6 @@ class G4:
 
         # Init LEDs
         self.blue_led = LED(22)
-        self.red_led = LED(23)
 
     def __get_command(self, command):
         """
@@ -74,9 +72,6 @@ class G4:
         """
         while True:
             try:
-                # Data gathering LED (blue)
-                self.blue_led.on()
-
                 mb = self.__get_command('MB')
                 time.sleep(.1)
                 config.logging.info("Response from G4 - MB: [{0}]".format(mb))
@@ -109,14 +104,12 @@ class G4:
                     elif variable['command'] == 'E':
                         # TODO: Add implementation for boolean values (will require function 'get_bit_state')
                         pass
-                # Data gathering LED (blue)
-                self.blue_led.off()
 
-                # Write to NV memory LED (red)
-                self.red_led.on()
+                # Write to Permanent USB memory LED (blue)
+                self.blue_led.on()
                 config.logging.info('row to write = {0}'.format(row_to_write))
                 # Do we need a new file?
-                file_today = Path('/media/permanent_usb_storage/log_{0}.csv'.
+                file_today = Path('/media/permanent_usb_storage/running/log_{0}.csv'.
                                   format(self.g4_date_time.format('YYYY-MM-DD')))
                 if file_today.is_file():
                     # The file exists .. append
@@ -130,8 +123,8 @@ class G4:
                     with open(file_today, 'w') as current_file:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
-                # Write to NV memory LED (red)
-                self.red_led.off()
+                # Write to Permanent USB memory LED (blue)
+                self.blue_led.off()
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:
