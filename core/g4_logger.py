@@ -65,6 +65,22 @@ class G4:
                 config.logging.error(f'Error Opening Serial Port: {e.__str__()}')
                 time.sleep(5)
 
+    def _write_to_file(self, path, row_to_write):
+        # Do we need a new file?
+        file_today = Path('{0}]/log_{1}.csv'.format(path,self.g4_date_time.format('YYYY-MM-DD')))
+        if file_today.is_file():
+            # The file exists .. append
+            with open(file_today, 'a') as current_file:
+                current_file.write('{0}\n'.format(row_to_write))
+        else:
+            # The file does not exists .. create with header then append
+            header = 'timestamp,'
+            for variable in config.variables:
+                header += '{0},'.format(variable['name'])
+            with open(file_today, 'w') as current_file:
+                current_file.write('{0}\n'.format(header))
+                current_file.write('{0}\n'.format(row_to_write))
+
     def serial_polling(self):
         """
         Polls G4 device in a predefined rate. Uses D(x) fot variables configuration
@@ -109,21 +125,12 @@ class G4:
                 self.blue_led.on()
 
                 config.logging.info('row to write = {0}'.format(row_to_write))
-                # Do we need a new file?
-                file_today = Path('/media/permanent_usb_storage/running/log_{0}.csv'.
-                                  format(self.g4_date_time.format('YYYY-MM-DD')))
-                if file_today.is_file():
-                    # The file exists .. append
-                    with open(file_today, 'a') as current_file:
-                        current_file.write('{0}\n'.format(row_to_write))
-                else:
-                    # The file does not exists .. create with header then append
-                    header = 'timestamp,'
-                    for variable in config.variables:
-                        header += '{0},'.format(variable['name'])
-                    with open(file_today, 'w') as current_file:
-                        current_file.write('{0}\n'.format(header))
-                        current_file.write('{0}\n'.format(row_to_write))
+
+                # -------> Running File
+                self._write_to_file('/media/permanent_usb_storage/running', row_to_write)
+
+                # -------> Backup File
+                self._write_to_file('/media/permanent_usb_storage/backup', row_to_write)
 
                 # Write to Permanent USB memory LED (blue)
                 self.blue_led.off()
