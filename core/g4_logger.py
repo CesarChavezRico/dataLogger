@@ -107,6 +107,7 @@ class G4:
 
                 # Write to Permanent USB memory LED (blue)
                 self.blue_led.on()
+
                 config.logging.info('row to write = {0}'.format(row_to_write))
                 # Do we need a new file?
                 file_today = Path('/media/permanent_usb_storage/running/log_{0}.csv'.
@@ -123,8 +124,10 @@ class G4:
                     with open(file_today, 'w') as current_file:
                         current_file.write('{0}\n'.format(header))
                         current_file.write('{0}\n'.format(row_to_write))
+
                 # Write to Permanent USB memory LED (blue)
                 self.blue_led.off()
+
             except ValueError as e:
                 config.logging.info("ValueError: {0}".format(e))
             except IOError as e:

@@ -21,13 +21,16 @@ class USB:
         call(["udevadm", "trigger"])  # Make sure that UDEV rules executed
         self._mount_usb(self.permanent_mount_path, self.permanent_dev_name)  # Mount our permanent USB drive
 
+        check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
+        check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
+
         # Init LEDs
         self.red_led = LED(23)
 
     @staticmethod
     def _mount_usb(mount_path, dev_name):
         try:
-            result = check_output(['mkdir', mount_path])
+            check_output(['mkdir', mount_path])
         except CalledProcessError as e:
             # Adding 4 seconds last 3 led´s yellow for error on mounting directory
             # TODO: add led signaling
@@ -53,11 +56,12 @@ class USB:
                 result = ''
                 try:
                     self._mount_usb(self.mount_path, dev_name)
+                    check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
                     result = check_output(['rsync',
                                            '--append',
                                            '-zavh',
                                            '/media/permanent_usb_storage/running',
-                                           '/media/usb_storage/data_logger'])
+                                           '/media/permanent_usb_storage/backup'])
                     config.logging.warning('rsync [local backup] output = {0}'.format(result.decode()))
                     result = check_output(['rsync',
                                            '--append',
