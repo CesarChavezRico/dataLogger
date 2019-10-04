@@ -1,0 +1,31 @@
+{
+  "apiEndpoint": "https://api.balena-cloud.com",
+  "appUpdatePollInterval": 900000,
+  "applicationId": "1496610",
+  "applicationName": "dataLogger",
+  "deltaEndpoint": "https://delta.balena-cloud.com",
+  "deviceApiKey": "b1b328e5aae8fd328753c8db4263b14e",
+  "deviceApiKeys": {
+    "api.balena-cloud.com": "b1b328e5aae8fd328753c8db4263b14e"
+  },
+  "deviceType": "raspberrypi3",
+  "listenPort": "48484",
+  "mixpanelToken": "9ef939ea64cb6cd8bbc96af72345d70d",
+  "pubnubPublishKey": "",
+  "pubnubSubscribeKey": "",
+  "registryEndpoint": "registry2.balena-cloud.com",
+  "userId": "15261",
+  "username": "cesar1",
+  "vpnEndpoint": "vpn.balena-cloud.com",
+  "vpnPort": "443",
+  "uuid": "9420c1c6ded7f9be7f21f686ace3451c",
+  "registered_at": 1570153093212,
+  "deviceId": 1712322,
+  "os": {
+    "udevRules": {
+      "10-g4": "SUBSYSTEMS==\"usb\", KERNEL==\"ttyUSB[0-9]*\", ATTRS{idVendor}==\"0403\", ATTRS{idProduct}==\"6001\", SYMLINK+=\"G4\", MODE=\"0660\"\n\n",
+      "30-usb-logger": "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"090c\", ATTRS{idProduct}==\"1000\", SYMLINK+=\"permanent_usb_drive\"\n\n"
+
+    }
+  }
+}
