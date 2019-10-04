@@ -9,7 +9,7 @@ class USB:
     monitor = None
     mount_path = '/media/usb_storage'
     permanent_mount_path = '/media/permanent_usb_ storage'
-    permanent_dev_name = 'permanent_usb_drive'
+    permanent_dev_name = 'dev/permanent_usb_drive'
 
     def __init__(self):
         context = pyudev.Context()
