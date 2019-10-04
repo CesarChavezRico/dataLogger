@@ -29,7 +29,7 @@ class USB:
             # Maybe the directory is already created, all good
             pass
         finally:
-            check_output(['mount', dev_name, self.mount_path])
+            check_output(['mount', dev_name, mount_path])
 
     def check_for_devices(self):
         devices_count = 0

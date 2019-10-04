@@ -24,7 +24,7 @@
   "os": {
     "udevRules": {
       "10-g4": "SUBSYSTEMS==\"usb\", KERNEL==\"ttyUSB[0-9]*\", ATTRS{idVendor}==\"0403\", ATTRS{idProduct}==\"6001\", SYMLINK+=\"G4\", MODE=\"0660\"\n\n",
-      "30-usb-logger": "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"090c\", ATTRS{idProduct}==\"1000\", SYMLINK+=\"permanent_usb_drive\"\n\n"
+      "30-usb-logger": "KERNEL==\"sda1\", ATTRS{idVendor}==\"090c\", ATTRS{idProduct}==\"1000\", SYMLINK+=\"permanent_usb_drive\"\n\n"
 
     }
   }
