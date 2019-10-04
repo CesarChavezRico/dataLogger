@@ -67,7 +67,7 @@ class G4:
 
     def _write_to_file(self, path, row_to_write):
         # Do we need a new file?
-        file_today = Path('{0}]/log_{1}.csv'.format(path,self.g4_date_time.format('YYYY-MM-DD')))
+        file_today = Path('{0}/log_{1}.csv'.format(path, self.g4_date_time.format('YYYY-MM-DD')))
         if file_today.is_file():
             # The file exists .. append
             with open(file_today, 'a') as current_file:
