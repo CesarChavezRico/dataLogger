@@ -32,12 +32,7 @@ class USB:
         try:
             check_output(['mkdir', mount_path])
         except CalledProcessError as e:
-            # Adding 4 seconds last 3 led´s yellow for error on mounting directory
-            # TODO: add led signaling
-            # time.sleep(4)
-            config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(dev_name,
-                                                                                                 str(e)))
-            # Maybe the directory is already created, all good
+            config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(dev_name, str(e)))
             pass
         finally:
             check_output(['mount', dev_name, mount_path])
@@ -54,8 +49,15 @@ class USB:
                 devices_count += 1
                 config.logging.warning('Trying to mount device #{0}: {1} ...'.format(devices_count, dev_name))
                 result = ''
+
                 try:
                     self._mount_usb(self.mount_path, dev_name)
+                except CalledProcessError as e:
+                    config.logging.error(
+                        'Error creating mounting directory for device #{0}: {1}'.format(dev_name, str(e)))
+                    pass
+
+                try:
                     check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
                     result = check_output(['rsync',
                                            '--append',
