@@ -21,8 +21,19 @@ class USB:
         call(["udevadm", "trigger"])  # Make sure that UDEV rules executed
         self._mount_usb(self.permanent_mount_path, self.permanent_dev_name)  # Mount our permanent USB drive
 
-        check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
-        check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
+        try:
+            check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
+        except CalledProcessError as e:
+            config.logging.error(
+                'Error creating [running] directory already exists?: {0}'.format(str(e)))
+            pass
+
+        try:
+            check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
+        except CalledProcessError as e:
+            config.logging.error(
+                'Error creating [backup] directory, already exists?: {0}'.format(str(e)))
+            pass
 
         # Init LEDs
         self.red_led = LED(23)
@@ -52,13 +63,13 @@ class USB:
 
                 try:
                     self._mount_usb(self.mount_path, dev_name)
-                except CalledProcessError as e:
-                    config.logging.error(
-                        'Error creating mounting directory for device #{0}: {1}'.format(dev_name, str(e)))
-                    pass
+                    try:
+                        check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
+                    except CalledProcessError as e:
+                        config.logging.error(
+                            f'Error creating [data_logger] directory in external drive, already exists?: {str(e)}')
+                        pass
 
-                try:
-                    check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
                     result = check_output(['rsync',
                                            '--append',
                                            '-zavh',
@@ -73,7 +84,7 @@ class USB:
                                            '/media/usb_storage/data_logger'])
                     config.logging.warning('rsync [external backup] output = {0}'.format(result.decode()))
                     config.logging.warning('Backup completed! ... Unmounting')
-                    # TODO: add led signaling
+
                     try:
                         check_output(['umount', self.mount_path])
                     except CalledProcessError as e:
