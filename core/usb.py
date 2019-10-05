@@ -48,6 +48,7 @@ class USB:
         try:
             result = check_output(['mkdir', mount_path])
         except CalledProcessError as e:
+            print(e.output.decode)
             if 'File exists' in e.output.decode():
                 pass
             else:
@@ -77,7 +78,7 @@ class USB:
                                 pass
                             else:
                                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
-                                continue
+
                         files = os.listdir(f'{self.permanent_mount_path}/running/')
                         try:
                             for file in files:
