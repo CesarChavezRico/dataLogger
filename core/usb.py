@@ -25,18 +25,20 @@ class USB:
         self._mount_usb(self.permanent_mount_path, self.permanent_dev_name)  # Mount our permanent USB drive
 
         try:
-            check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
+            result = check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
         except CalledProcessError as e:
-            config.logging.error(
-                'Error creating [running] directory already exists?: {0}'.format(str(e)))
-            pass
+            if 'File exists' in result:
+                pass
+            else:
+                config.logging.error(f'Error creating directory in external drive: {str(e)}')
 
         try:
-            check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
+            result = check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
         except CalledProcessError as e:
-            config.logging.error(
-                'Error creating [backup] directory, already exists?: {0}'.format(str(e)))
-            pass
+            if 'File exists' in result:
+                pass
+            else:
+                config.logging.error(f'Error creating directory in external drive: {str(e)}')
 
         # Init LEDs
         self.red_led = LED(23)
@@ -44,10 +46,12 @@ class USB:
     @staticmethod
     def _mount_usb(mount_path, dev_name):
         try:
-            check_output(['mkdir', mount_path])
+            result = check_output(['mkdir', mount_path])
         except CalledProcessError as e:
-            config.logging.error('Error creating mounting directory for device #{0}: {1}'.format(dev_name, str(e)))
-            pass
+            if 'File exists' in result:
+                pass
+            else:
+                config.logging.error(f'Error creating directory in external drive: {str(e)}')
         finally:
             check_output(['mount', dev_name, mount_path])
 
@@ -67,11 +71,13 @@ class USB:
                     try:
                         self._mount_usb(self.mount_path, dev_name)
                         try:
-                            check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
+                            result = check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
                         except CalledProcessError as e:
-                            config.logging.error(
-                                f'Error creating [data_logger] directory in external drive, already exists?: {str(e)}')
-                            pass
+                            if 'File exists' in result:
+                                pass
+                            else:
+                                config.logging.error(f'Error creating directory in external drive: {str(e)}')
+                                continue
                         files = os.listdir(f'{self.permanent_mount_path}/running/')
                         try:
                             for file in files:
@@ -88,12 +94,12 @@ class USB:
                                     config.logging.warning(f'[external backup] [{file}] not found in destination'
                                                            f' - Just copying')
                                     result = check_output(['cp',
-                                                           f'{self.permanent_mount_path}/{file}',
+                                                           f'{self.permanent_mount_path}/running/{file}',
                                                            f'{self.mount_path}/data_logger/{file}'])
                                     config.logging.warning(f'[external backup] [cp] output = {result.decode}')
 
                                 config.logging.warning(f'[external backup] deleting internal [{file}]')
-                                result = check_output(['rm', f'{self.permanent_mount_path}/{file}'])
+                                result = check_output(['rm', f'{self.permanent_mount_path}/running/{file}'])
                                 config.logging.warning(f'[external backup] [rm] output = {result.decode}')
 
                         except CalledProcessError as e:
