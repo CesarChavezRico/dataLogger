@@ -1,5 +1,6 @@
 import config
 from pathlib import Path
+import os
 import pyudev
 from subprocess import call, check_output, CalledProcessError
 from gpiozero import LED
@@ -71,14 +72,15 @@ class USB:
                             config.logging.error(
                                 f'Error creating [data_logger] directory in external drive, already exists?: {str(e)}')
                             pass
-
-                        result = check_output(['rsync',
-                                               '--append',
-                                               '--remove-source-files',
-                                               '-zavhc',
-                                               '/media/permanent_usb_storage/running/',
-                                               '/media/usb_storage/data_logger'])
-                        config.logging.warning('rsync [external backup] output = {0}'.format(result.decode()))
+                        files = os.listdir('/media/permanent_usb_storage/running/')
+                        try:
+                            for file in files:
+                                result = check_output(['cat', file, f'/media/usb_storage/data_logger/{file}'])
+                                config.logging.warning('[external backup] output = {0}'.format(result.decode()))
+                        except CalledProcessError as e:
+                            config.logging.error(
+                                f'Fatal Error backing up [{file}]: {str(e)}')
+                            continue
                         try:
                             config.logging.warning('Backup completed! ... Unmounting')
                             check_output(['umount', self.mount_path])
