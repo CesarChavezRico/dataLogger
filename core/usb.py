@@ -27,7 +27,7 @@ class USB:
         try:
             result = check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
         except CalledProcessError as e:
-            if 'File exists' in e.output:
+            if 'File exists' in e.output.decode():
                 pass
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
@@ -35,7 +35,7 @@ class USB:
         try:
             result = check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
         except CalledProcessError as e:
-            if 'File exists' in e.output:
+            if 'File exists' in e.output.decode():
                 pass
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
@@ -48,7 +48,7 @@ class USB:
         try:
             result = check_output(['mkdir', mount_path])
         except CalledProcessError as e:
-            if 'File exists' in e.output:
+            if 'File exists' in e.output.decode():
                 pass
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
@@ -73,7 +73,7 @@ class USB:
                         try:
                             result = check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
                         except CalledProcessError as e:
-                            if 'File exists' in e.output:
+                            if 'File exists' in e.output.decode():
                                 pass
                             else:
                                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
