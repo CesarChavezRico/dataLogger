@@ -75,8 +75,12 @@ class USB:
                         files = os.listdir('/media/permanent_usb_storage/running/')
                         try:
                             for file in files:
-                                result = check_output(['cat', file, f'/media/usb_storage/data_logger/{file}'])
-                                config.logging.warning('[external backup] output = {0}'.format(result.decode()))
+                                result = check_output(['cat', file, '>>', f'/media/usb_storage/data_logger/{file}'])
+                                config.logging.warning(f'[external backup] [cat] output = {result.decode}')
+                                config.logging.warning(f'[external backup] deleting internal [{file}]')
+                                result = check_output(['rm', file])
+                                config.logging.warning(f'[external backup] [rm] output = {result.decode}')
+
                         except CalledProcessError as e:
                             config.logging.error(
                                 f'Fatal Error backing up [{file}]: {str(e)}')
