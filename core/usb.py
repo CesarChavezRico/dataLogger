@@ -72,10 +72,10 @@ class USB:
                             config.logging.error(
                                 f'Error creating [data_logger] directory in external drive, already exists?: {str(e)}')
                             pass
-                        files = os.listdir('/media/permanent_usb_storage/running/')
+                        files = os.listdir(f'{self.permanent_mount_path}/running/')
                         try:
                             for file in files:
-                                destination_file = Path(f'/media/usb_storage/data_logger/{file}')
+                                destination_file = Path(f'{self.mount_path}/data_logger/{file}')
                                 if destination_file.is_file():
                                     config.logging.warning(f'[external backup] [{file}] already exists in destination'
                                                            f' - Appending')
@@ -87,11 +87,13 @@ class USB:
                                 else:
                                     config.logging.warning(f'[external backup] [{file}] not found in destination'
                                                            f' - Just copying')
-                                    result = check_output(['cp', file, f'/media/usb_storage/data_logger/{file}'])
+                                    result = check_output(['cp',
+                                                           f'{self.permanent_mount_path}/{file}',
+                                                           f'{self.mount_path}/data_logger/{file}'])
                                     config.logging.warning(f'[external backup] [cp] output = {result.decode}')
 
                                 config.logging.warning(f'[external backup] deleting internal [{file}]')
-                                result = check_output(['rm', file])
+                                result = check_output(['rm', f'{self.permanent_mount_path}/{file}'])
                                 config.logging.warning(f'[external backup] [rm] output = {result.decode}')
 
                         except CalledProcessError as e:
