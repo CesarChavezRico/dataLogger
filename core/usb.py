@@ -75,8 +75,21 @@ class USB:
                         files = os.listdir('/media/permanent_usb_storage/running/')
                         try:
                             for file in files:
-                                result = check_output(['cat', file, '>>', f'/media/usb_storage/data_logger/{file}'])
-                                config.logging.warning(f'[external backup] [cat] output = {result.decode}')
+                                destination_file = Path(f'/media/usb_storage/data_logger/{file}')
+                                if destination_file.is_file():
+                                    config.logging.warning(f'[external backup] [{file}] already exists in destination'
+                                                           f' - Appending')
+                                    with open(file, 'r') as source_file:
+                                        contents = source_file.read()
+                                        with open(destination_file, 'a') as des_file:
+                                            des_file.write(contents)
+
+                                else:
+                                    config.logging.warning(f'[external backup] [{file}] not found in destination'
+                                                           f' - Just copying')
+                                    result = check_output(['cp', file, f'/media/usb_storage/data_logger/{file}'])
+                                    config.logging.warning(f'[external backup] [cp] output = {result.decode}')
+
                                 config.logging.warning(f'[external backup] deleting internal [{file}]')
                                 result = check_output(['rm', file])
                                 config.logging.warning(f'[external backup] [rm] output = {result.decode}')
