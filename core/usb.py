@@ -86,7 +86,7 @@ class USB:
                                 if destination_file.is_file():
                                     config.logging.warning(f'[external backup] [{file}] already exists in destination'
                                                            f' - Appending')
-                                    with open(file, 'r') as source_file:
+                                    with open(f'{self.permanent_mount_path}/running/{file}', 'r') as source_file:
                                         contents = source_file.read()
                                         with open(destination_file, 'a') as des_file:
                                             des_file.write(contents)
@@ -112,7 +112,8 @@ class USB:
                             check_output(['umount', self.mount_path])
                         except CalledProcessError as e:
                             output = e.output.decode()
-                            config.logging.error('Fatal error unmounting device #{0}: {1}'.format(devices_count,output))
+                            config.logging.error('Fatal error unmounting device #{0}: {1}'.format(devices_count,
+                                                                                                  output))
                             continue
                         try:
                             check_output(['rm', '-r', self.mount_path])
