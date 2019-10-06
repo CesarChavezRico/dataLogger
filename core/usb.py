@@ -102,12 +102,10 @@ class USB:
                                     result = check_output(['cp',
                                                            f'{self.permanent_mount_path}/running/{file}',
                                                            f'{self.mount_path}/data_logger/{file}'], stderr=STDOUT)
-                                    config.logging.warning(f'[external backup] [cp] output = {result.decode()}')
 
                                 config.logging.warning(f'[external backup] deleting internal [{file}]')
                                 result = check_output(['rm',
                                                        f'{self.permanent_mount_path}/running/{file}'], stderr=STDOUT)
-                                config.logging.warning(f'[external backup] [rm] output = {result.decode()}')
 
                         except CalledProcessError as e:
                             config.logging.error(

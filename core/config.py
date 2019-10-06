@@ -21,8 +21,8 @@ else:
     rate = int(os.environ['polling_rate'])
     logging.debug('Polling Rate: {0}'.format(rate))
 
-    # Analog logging variables configuration
-    # 1
+    # Analog logging variables configuration [MB,59,Gasto,1,-.008]
+    #     ---->  1
     Avar1 = os.environ['Avar1']
     Avar1 = Avar1.split(',')
     analog_variable_1 = {
@@ -34,7 +34,7 @@ else:
     }
     logging.debug('Analog Variable 1 - Configuration:\n{0}'.format(analog_variable_1))
 
-    # 2
+    #     ---->  2
     Avar2 = os.environ['Avar2']
     Avar2 = Avar2.split(',')
     analog_variable_2 = {
@@ -46,10 +46,33 @@ else:
     }
     logging.debug('Analog Variable 2 - Configuration:\n{0}'.format(analog_variable_2))
 
+    # Digital logging variables configuration [E,24,3,Estado Valvula]
+    #     ---->  1
+    Dvar1 = os.environ['Dvar1']
+    Dvar1 = Dvar1.split(',')
+    digital_variable_1 = {
+        'command': Dvar1[0],
+        'base_index': int(Dvar1[1]),
+        'bit_index': int(Dvar1[2]),
+        'name': Dvar1[3]
+    }
+
+    #     ---->  2
+    Dvar2 = os.environ['Dvar2']
+    Dvar2 = Dvar2.split(',')
+    digital_variable_2 = {
+        'command': Dvar2[0],
+        'base_index': int(Dvar2[1]),
+        'bit_index': int(Dvar2[2]),
+        'name': Dvar2[3]
+    }
+
     # Create variables package to poll
     variables = [
         analog_variable_1,
-        analog_variable_2
+        analog_variable_2,
+        digital_variable_1,
+        digital_variable_2
     ]
 
 

@@ -94,19 +94,19 @@ class G4:
             try:
                 mb = self.__get_command('MB')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - MB: [{0}]".format(mb))
+                config.logging.debug("Response from G4 - MB: [{0}]".format(mb))
 
                 s_1 = self.__get_command('S?1')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - S?1: [{0}]".format(s_1))
+                config.logging.debug("Response from G4 - S?1: [{0}]".format(s_1))
 
                 e = self.__get_command('E')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - E: [{0}]".format(e))
+                config.logging.debug("Response from G4 - E: [{0}]".format(e))
 
                 h = self.__get_command('H')
                 time.sleep(.1)
-                config.logging.info("Response from G4 - H: [{0}]".format(h))
+                config.logging.debug("Response from G4 - H: [{0}]".format(h))
 
                 row_to_write = None
                 try:
@@ -119,12 +119,12 @@ class G4:
                     if variable['command'] == 'MB':
                         raw_value = int(mb[variable['base_index']:variable['base_index']+4], 16)
                         value = (raw_value * variable['m']) + variable['b']
-                        row_to_write += '{0},'.format(value)
-                        config.logging.info('{0} = {1}'.format(variable['name'], value))
+                        row_to_write += f'{value},'
+                        config.logging.debug('{0} = {1}'.format(variable['name'], value))
                     elif variable['command'] == 'E':
-                        # TODO: Add implementation for boolean values (will require function 'get_bit_state')
-                        pass
-
+                        bit_value = self.get_bit_state(variable['base_index'], variable['bit_index'])
+                        row_to_write += f'{bit_value},'
+                        config.logging.debug('{0} = {1}'.format(variable['name'], bit_value))
                 with self.local_running_file_lock:
                     # Write to Permanent USB memory LED (blue)
                     self.blue_led.on()
@@ -133,7 +133,6 @@ class G4:
 
                     # -------> Running File
                     self._write_to_file('/media/permanent_usb_storage/running', row_to_write)
-
                     # -------> Backup File
                     self._write_to_file('/media/permanent_usb_storage/backup', row_to_write)
 
@@ -148,3 +147,63 @@ class G4:
                 config.logging.info("TypeError: {0}".format(e))
 
             time.sleep(config.rate)
+
+    @staticmethod
+    def get_bit_state(string, bit_num):
+        """
+        Returns the state of a bit out of a Hex string
+        Usage: get_bit_state(e[16:17], 1)
+        :return bit state as 1 or 0
+        """
+        byte = int(string, 16)
+        if bit_num == 7:
+            mask = 128
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 6:
+            mask = 64
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 5:
+            mask = 32
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 4:
+            mask = 16
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 3:
+            mask = 8
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 2:
+            mask = 4
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 1:
+            mask = 2
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        elif bit_num == 0:
+            mask = 1
+            if byte & mask:
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
