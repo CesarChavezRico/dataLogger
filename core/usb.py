@@ -2,7 +2,7 @@ import config
 from pathlib import Path
 import os
 import pyudev
-from subprocess import call, check_output, CalledProcessError
+from subprocess import call, check_output, CalledProcessError, STDOUT
 from gpiozero import LED
 
 
@@ -25,7 +25,7 @@ class USB:
         self._mount_usb(self.permanent_mount_path, self.permanent_dev_name)  # Mount our permanent USB drive
 
         try:
-            result = check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)])
+            check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)], stderr=STDOUT)
         except CalledProcessError as e:
             if 'File exists' in e.output.decode():
                 pass
@@ -33,7 +33,7 @@ class USB:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
 
         try:
-            result = check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)])
+            check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)], stderr=STDOUT)
         except CalledProcessError as e:
             if 'File exists' in e.output.decode():
                 pass
@@ -46,7 +46,7 @@ class USB:
     @staticmethod
     def _mount_usb(mount_path, dev_name):
         try:
-            result = check_output(['mkdir', mount_path])
+            check_output(['mkdir', mount_path], stderr=STDOUT)
         except CalledProcessError as e:
             print(e.output.decode)
             if 'File exists' in e.output.decode():
@@ -54,7 +54,7 @@ class USB:
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
         finally:
-            check_output(['mount', dev_name, mount_path])
+            check_output(['mount', dev_name, mount_path], stderr=STDOUT)
 
     def check_for_devices(self):
         devices_count = 0
@@ -72,7 +72,7 @@ class USB:
                     try:
                         self._mount_usb(self.mount_path, dev_name)
                         try:
-                            result = check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)])
+                            check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)], stderr=STDOUT)
                         except CalledProcessError as e:
                             if 'File exists' in e.output.decode():
                                 pass
@@ -96,12 +96,13 @@ class USB:
                                                            f' - Just copying')
                                     result = check_output(['cp',
                                                            f'{self.permanent_mount_path}/running/{file}',
-                                                           f'{self.mount_path}/data_logger/{file}'])
-                                    config.logging.warning(f'[external backup] [cp] output = {result.decode}')
+                                                           f'{self.mount_path}/data_logger/{file}'], stderr=STDOUT)
+                                    config.logging.warning(f'[external backup] [cp] output = {result.decode()}')
 
                                 config.logging.warning(f'[external backup] deleting internal [{file}]')
-                                result = check_output(['rm', f'{self.permanent_mount_path}/running/{file}'])
-                                config.logging.warning(f'[external backup] [rm] output = {result.decode}')
+                                result = check_output(['rm',
+                                                       f'{self.permanent_mount_path}/running/{file}'], stderr=STDOUT)
+                                config.logging.warning(f'[external backup] [rm] output = {result.decode()}')
 
                         except CalledProcessError as e:
                             config.logging.error(
@@ -109,14 +110,14 @@ class USB:
                             continue
                         try:
                             config.logging.warning('Backup completed! ... Unmounting')
-                            check_output(['umount', self.mount_path])
+                            check_output(['umount', self.mount_path], stderr=STDOUT)
                         except CalledProcessError as e:
                             output = e.output.decode()
                             config.logging.error('Fatal error unmounting device #{0}: {1}'.format(devices_count,
                                                                                                   output))
                             continue
                         try:
-                            check_output(['rm', '-r', self.mount_path])
+                            check_output(['rm', '-r', self.mount_path], stderr=STDOUT)
                         except CalledProcessError as e:
                             output = e.output.decode()
                             config.logging.error('Fatal error removing mounting directory for device #{0}: {1}'
