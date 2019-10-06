@@ -122,7 +122,8 @@ class G4:
                         row_to_write += f'{value},'
                         config.logging.debug('{0} = {1}'.format(variable['name'], value))
                     elif variable['command'] == 'E':
-                        bit_value = self.get_bit_state(variable['base_index'], variable['bit_index'])
+                        bit_value = self.get_bit_state(e[variable['base_index']:variable['base_index']+1],
+                                                       variable['bit_index'])
                         row_to_write += f'{bit_value},'
                         config.logging.debug('{0} = {1}'.format(variable['name'], bit_value))
                 with self.local_running_file_lock:
