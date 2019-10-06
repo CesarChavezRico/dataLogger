@@ -28,7 +28,7 @@ class USB:
             check_output(['mkdir', '{0}/running'.format(self.permanent_mount_path)], stderr=STDOUT)
         except CalledProcessError as e:
             if 'File exists' in e.output.decode():
-                pass
+                config.logging.info(f'Known error - File exists for: {self.permanent_mount_path}/running')
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
 
@@ -36,7 +36,7 @@ class USB:
             check_output(['mkdir', '{0}/backup'.format(self.permanent_mount_path)], stderr=STDOUT)
         except CalledProcessError as e:
             if 'File exists' in e.output.decode():
-                pass
+                config.logging.info(f'Known error - File exists for: {self.permanent_mount_path}/backup')
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
 
@@ -48,13 +48,18 @@ class USB:
         try:
             check_output(['mkdir', mount_path], stderr=STDOUT)
         except CalledProcessError as e:
-            print(e.output.decode)
             if 'File exists' in e.output.decode():
-                pass
+                config.logging.info(f'Known error - File exists for: {mount_path}')
             else:
                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
         finally:
-            check_output(['mount', dev_name, mount_path], stderr=STDOUT)
+            try:
+                check_output(['mount', dev_name, mount_path], stderr=STDOUT)
+            except CalledProcessError as e:
+                if 'USB drive' in e.output.decode():
+                    config.logging.info(f'Known error - USB drive for: {dev_name}')
+                else:
+                    config.logging.error(f'Error mounting [{dev_name}]: {str(e)}')
 
     def check_for_devices(self):
         devices_count = 0
@@ -75,7 +80,7 @@ class USB:
                             check_output(['mkdir', '{0}/data_logger'.format(self.mount_path)], stderr=STDOUT)
                         except CalledProcessError as e:
                             if 'File exists' in e.output.decode():
-                                pass
+                                config.logging.info(f'Known error - File exists for: {self.mount_path}/data_logger')
                             else:
                                 config.logging.error(f'Error creating directory in external drive: {str(e)}')
 
