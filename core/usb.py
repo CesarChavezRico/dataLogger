@@ -87,9 +87,9 @@ class USB:
                                     config.logging.warning(f'[external backup] [{file}] already exists in destination'
                                                            f' - Appending')
                                     with open(f'{self.permanent_mount_path}/running/{file}', 'r') as source_file:
-                                        contents = source_file.read()
+                                        contents = source_file.readlines()
                                         with open(destination_file, 'a') as des_file:
-                                            des_file.write(contents)
+                                            des_file.writelines(contents[1:])
 
                                 else:
                                     config.logging.warning(f'[external backup] [{file}] not found in destination'
