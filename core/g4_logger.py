@@ -147,7 +147,13 @@ class G4:
             except TypeError as e:
                 config.logging.info("TypeError: {0}".format(e))
 
-            time.sleep(config.rate)
+            rate = config.normal_polling_rate
+            if self.get_bit_state(e[config.fast_polling['base_index']:config.fast_polling['base_index']+1],
+                                  config.fast_polling['bit_index']) == 1:
+                # Fast Polling Enabled
+                rate = config.fast_polling_rate
+
+            time.sleep(rate)
 
     @staticmethod
     def get_bit_state(string, bit_num):

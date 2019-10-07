@@ -17,9 +17,19 @@ else:
     logging.getLogger().setLevel(logging_level)
     logging.warning("Environment Variable: logging_level = {0}".format(logging_level))
 
-    # Polling Rate
-    rate = int(os.environ['polling_rate'])
-    logging.debug('Polling Rate: {0}'.format(rate))
+    # Polling Rates
+    normal_polling_rate = float(os.environ['normal_polling_rate'])
+    logging.debug('Normal Polling Rate: {0}'.format(normal_polling_rate))
+
+    fast_polling_rate = float(os.environ['fast_polling_rate'])
+    logging.debug('Fast Polling Rate: {0}'.format(fast_polling_rate))
+
+    fast_polling_rate_enabled_configuration = os.environ['fast_polling_rate_enabled_configuration'].split(',')
+    fast_polling = {
+        'command': fast_polling_rate_enabled_configuration[0],
+        'base_index': int(fast_polling_rate_enabled_configuration[1]),
+        'bit_index': int(fast_polling_rate_enabled_configuration[2]),
+    }
 
     # Analog logging variables configuration [MB,59,Gasto,1,-.008]
     #     ---->  1
