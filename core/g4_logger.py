@@ -111,7 +111,7 @@ class G4:
                 row_to_write = None
                 try:
                     self.g4_date_time = pendulum.from_format(h[3:], 'HH:mm:ss DD/MM/YY')
-                    row_to_write = '{0},'.format(self.g4_date_time.timestamp())
+                    row_to_write = '{0},'.format(self.g4_date_time.format('DD/MM/YYYY,HH:mm:ss'))
                 except (ValueError, TypeError):
                     config.logging.error('Error in G4 device time: {0}'.format(h))
 
