@@ -60,7 +60,7 @@ class USB:
                     config.logging.info(f'Known error - USB drive for: {dev_name}')
                 else:
                     config.logging.error(f'_mount_usb: Error mounting [{dev_name}]: {str(e)}')
-                    raise CalledProcessError
+                    raise CalledProcessError(f'Mount error for device: {dev_name}')
 
     def check_for_devices(self):
         devices_count = 0
