@@ -60,7 +60,7 @@ class USB:
                     config.logging.info(f'Known error - USB drive for: {dev_name}')
                 else:
                     config.logging.error(f'_mount_usb: Error mounting [{dev_name}]: {str(e)}')
-                    raise CalledProcessError(f'Mount error for device: {dev_name}')
+                    raise Exception(f'Mount error for device: {dev_name}')
 
     def check_for_devices(self):
         devices_count = 0
@@ -130,7 +130,7 @@ class USB:
                             continue
                         self.red_led.off()
 
-                    except CalledProcessError as e:
+                    except Exception as e:
                         config.logging.error('check_for_devices: Fatal error mounting or copying to USB drive: '
                                              '{0}'.format(e.__str__()))
                         continue
