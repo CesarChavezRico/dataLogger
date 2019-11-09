@@ -102,6 +102,7 @@ class USB:
                                     result = check_output(['cp',
                                                            f'{self.permanent_mount_path}/running/{file}',
                                                            f'{self.mount_path}/data_logger/{file}'], stderr=STDOUT)
+                                    print(f'result from cp: \n{result}')
 
                                 config.logging.warning(f'[external backup] deleting internal [{file}]')
                                 result = check_output(['rm',

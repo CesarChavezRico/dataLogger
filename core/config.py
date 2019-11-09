@@ -15,7 +15,7 @@ else:
                         format='%(asctime)s - [%(levelname)s]: %(message)s',
                         level=logging_level)
     logging.getLogger().setLevel(logging_level)
-    logging.warning("Environment Variable: logging_level = {0}".format(logging_level))
+    logging.debug("Environment Variable: logging_level = {0}".format(logging_level))
 
     # Polling Rates
     normal_polling_rate = float(os.environ['normal_polling_rate'])
